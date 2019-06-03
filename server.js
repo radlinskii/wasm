@@ -13,4 +13,4 @@ app.use(express.static('public', {
 }));
 
 // eslint-disable-next-line no-console
-app.listen(2222, () => console.log('listening on port 2222!'));
+app.listen(process.env.PORT, () => console.log(`listening on port ${process.env.PORT}!`));
