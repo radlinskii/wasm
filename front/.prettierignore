@@ -1,0 +1,6 @@
+lib
+public/wasm
+public/bundle.js
+node_modules
+package.json
+package-lock.json
