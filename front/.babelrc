@@ -1,0 +1,10 @@
+{
+    "presets": [
+        "@babel/preset-env",
+        "@babel/preset-react"
+    ],
+    "overrides": [{
+        "test": "node_modules/react-dom/cjs/react-dom.development.js",
+        "compact": false,
+      }],
+}
