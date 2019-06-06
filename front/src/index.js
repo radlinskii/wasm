@@ -4,7 +4,6 @@ import Input from './Input';
 
 const App = () => {
     useEffect(() => {
-        window.greetFromJS = name => `Hello ${name}, from JS!`;
         const greetJS = window.cwrap('greet', 'string', ['string']);
 
         window.Module.onRuntimeInitialized = () => {

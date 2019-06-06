@@ -11,6 +11,9 @@
     <body>
         <h1>WebAssembly Demo in React</h1>
         <div id="app"></div>
+        <script>
+            window.greetFromJS = name => `Hello ${name}, from JS!`;
+        </script>
         <script src="wasm/demo.js" charset="utf-8"></script>
         <script src="bundle.js"></script>
     </body>
