@@ -36,7 +36,6 @@
             }
 
             Module.onRuntimeInitialized = () => {
-
                 const jsStart = performance.now();
                 const jsPrimes = checkPrimes(limit);
                 console.log('JS', jsPrimes, Math.round(performance.now() - jsStart) / 1000);

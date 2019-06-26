@@ -35,7 +35,7 @@ const Input = () => {
 
     return (
         <div>
-            <label htmlFor="input">Type your message</label>
+            <label htmlFor="input">Type your message here:</label>
             <input id="input" name="input" type="text" />
             <button id="button">Send</button>
         </div>

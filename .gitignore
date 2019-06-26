@@ -1,5 +1,7 @@
 node_modules
 .idea
 .vscode
-wasm
-front/public/bundle.js
+./wasm
+public/bundle.js
+public/wasm/**.js
+public/wasm/**.wasm

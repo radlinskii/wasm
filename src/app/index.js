@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Input from './Input';
+import Input from './components/Input';
 
 const App = () => {
     useEffect(() => {
@@ -14,7 +14,7 @@ const App = () => {
 
     return (
         <div>
-            <h1>Hello World!!!!</h1>
+            <h1>Hello World!!!</h1>
             <Input />
         </div>
     );
