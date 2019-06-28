@@ -2,21 +2,21 @@
     "name": "wasm",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
-    "directories": {
-        "lib": "lib"
-    },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack",
-        "dev": "webpack --watch",
-        "lint": "eslint src"
+        "build:webpack": "webpack",
+        "build:wasm": "./buildwasm.sh",
+        "build": "npm run clean && npm run build:wasm && npm run build:webpack",
+        "clean": "rm -rf public/**.js public/**/**.js public/**/**.wasm",
+        "dev": "npm run clean && npm run build:wasm && webpack --watch",
+        "lint": "eslint src",
+        "start": "npm run build && go run server.go",
+        "test": "echo \"Error: no test specified\" && exit 0"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/radlinskii/wasm.git"
     },
-    "author": "",
+    "author": "radlinskii",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/radlinskii/wasm/issues"

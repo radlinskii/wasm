@@ -56,11 +56,28 @@ func reader(conn *websocket.Conn) {
 	}
 }
 
+func getLoggers() (info *log.Logger, err *log.Logger) {
+	err = log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	info = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+
+	return
+}
+
 func main() {
+	infoLogger, errLogger := getLoggers()
+
+	infoLogger.Println("Starting the server")
+
 	port := os.Getenv("PORT")
+	if port == "" {
+		err := fmt.Errorf("PORT is not specified")
+		errLogger.Fatalln(err)
+	}
+
+	infoLogger.Printf("Server running on PORT: %s\n", port)
 
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/ws", wsEndpoint)
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	errLogger.Fatal(http.ListenAndServe(":"+port, nil))
 }
