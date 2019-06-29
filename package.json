@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "build:webpack": "webpack",
+        "build:web": "webpack",
         "build:wasm": "./buildwasm.sh",
-        "build": "npm run clean && npm run build:wasm && npm run build:webpack",
+        "build": "npm run clean && npm run build:wasm && npm run build:web",
         "clean": "rm -rf public/**.js public/**/**.js public/**/**.wasm",
         "dev": "npm run clean && npm run build:wasm && webpack --watch",
         "lint": "eslint src",

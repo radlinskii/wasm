@@ -1,0 +1,9 @@
+.git
+.idea
+.vscode
+./wasm
+.DS_Store
+node_modules
+public/bundle.js
+public/wasm/**.js
+public/wasm/**.wasm
