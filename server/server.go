@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -8,6 +8,19 @@ import (
 
 	"github.com/gorilla/websocket"
 )
+
+// Logger combines std output and std error loggers
+type Logger struct {
+	Err  *log.Logger
+	Info *log.Logger
+}
+
+// GetLoggers is initializing the loggers
+func GetLoggers() *Logger {
+	return &Logger{
+		Err:  log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
+		Info: log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)}
+}
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -56,28 +69,12 @@ func reader(conn *websocket.Conn) {
 	}
 }
 
-func getLoggers() (info *log.Logger, err *log.Logger) {
-	err = log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
-	info = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	return
-}
-
-func main() {
-	infoLogger, errLogger := getLoggers()
-
-	infoLogger.Println("Starting the server")
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		err := fmt.Errorf("PORT is not specified")
-		errLogger.Fatalln(err)
-	}
-
-	infoLogger.Printf("Server running on PORT: %s\n", port)
-
+// Run runs the server
+func Run(port string, logger *Logger) {
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/ws", wsEndpoint)
 
-	errLogger.Fatal(http.ListenAndServe(":"+port, nil))
+	logger.Info.Printf("Server running on PORT: %s\n", port)
+
+	logger.Err.Fatal(http.ListenAndServe(":"+port, nil))
 }
