@@ -3,7 +3,9 @@ import React, { useEffect } from 'react';
 const Input = () => {
     useEffect(() => {
         /* eslint-disable no-console */
-        window.socket = new WebSocket(`ws://${window.location.host}/ws`);
+        const protocol = process.env.NODE_ENV !== 'production' ? 'ws' : 'wss';
+
+        window.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
         console.log('Attempting Connection...');
 
         const input = document.getElementById('input');

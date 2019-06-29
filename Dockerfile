@@ -19,7 +19,7 @@ COPY --from=build_wasm $APP_PATH .
 
 RUN npm ci
 
-RUN npm run build:web
+RUN npm run build:web:prod
 
 FROM golang:1.12.6-alpine3.10 AS run_server
 
