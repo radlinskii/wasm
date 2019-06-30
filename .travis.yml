@@ -1,0 +1,22 @@
+services:
+  - docker
+
+language: go
+sudo: false
+go:
+- "1.12"
+
+env:
+  - GO111MODULE=on
+
+deploy:
+  provider: heroku
+  app: wasm-playground
+  api_key: $HEROKU_API_KEY
+  run:
+    # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    # - docker tag
+    # - docker push
+    - heroku container:login
+    - heroku container:push web -a wasm-playground
+    - heroku container:release web -a wasm-playground
