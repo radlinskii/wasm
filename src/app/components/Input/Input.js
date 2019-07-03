@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import styles from './Input.scss';
 
 const Input = () => {
     useEffect(() => {
@@ -36,7 +37,7 @@ const Input = () => {
     });
 
     return (
-        <div>
+        <div className={styles.root}>
             <label htmlFor="input">Type your message here: </label>
             <input id="input" name="input" type="text" />
             <button id="button">Send</button>

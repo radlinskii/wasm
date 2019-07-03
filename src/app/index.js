@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Input from './components/Input';
+import Input from './components/Input/Input';
 
 const App = () => {
     useEffect(() => {
