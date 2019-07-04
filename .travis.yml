@@ -1,7 +1,9 @@
 services:
   - docker
-matrix:
+jobs:
   include:
+    - stage: test
+    - name: test go
     - language: go
       sudo: false
       go:
@@ -10,7 +12,7 @@ matrix:
         - GO111MODULE=on
       script:
         go test -v ./... -cover
-
+    - name: test node
     - language: node_js
       node_js:
       - "10"
@@ -18,9 +20,8 @@ matrix:
       - npm ci
       script:
       - npm t
-
-
-deploy:
-  provider: heroku
-  app: wasm-playground
-  api_key: $HEROKU_API_KEY
+    - stage: deploy
+      deploy:
+        provider: heroku
+        app: wasm-playground
+        api_key: $HEROKU_API_KEY
