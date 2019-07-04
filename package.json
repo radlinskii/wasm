@@ -11,9 +11,30 @@
         "clean": "rm -rf public/**.js public/**/**.js public/**/**.wasm",
         "dev": "npm run clean && npm run build:wasm && webpack --watch  --env development",
         "lint": "eslint src",
+        "prettier:fix": "prettier --write",
+        "precommit": "lint-staged",
+        "prepush": "npm t",
         "start": "npm run build:prod && go run main.go",
         "start:prod": "npm run build:prod && go run main.go",
         "test": "jest"
+    },
+    "lint-staged": {
+        "*.js": [
+            "eslint --fix",
+            "git add"
+        ],
+        "*.json": [
+            "npm run prettier:fix",
+            "git add"
+        ],
+        "*.scss": [
+            "stylelint --syntax=scss --fix",
+            "git add"
+        ],
+        "*.go": [
+            "goimports -w",
+            "git add"
+        ]
     },
     "jest": {
         "moduleNameMapper": {
@@ -52,8 +73,10 @@
         "eslint-plugin-prettier": "^3.1.0",
         "eslint-plugin-react": "^7.13.0",
         "eslint-plugin-react-hooks": "^1.6.0",
+        "husky": "^3.0.0",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^24.8.0",
+        "lint-staged": "^9.0.2",
         "node-sass": "^4.12.0",
         "prettier": "^1.17.1",
         "react-test-renderer": "^16.8.6",
