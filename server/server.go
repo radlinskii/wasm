@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// Server combines std output and std error loggers
+// Server type combines std output and std error loggers
 type Server struct {
 	Err  *log.Logger
 	Info *log.Logger
@@ -19,7 +19,7 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-// GetServer is initializing the loggers
+// GetServer is creating new server
 func GetServer() *Server {
 	return &Server{
 		Err:  log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
@@ -63,7 +63,7 @@ func (s *Server) listenOnWebSocket(conn *websocket.Conn) {
 	}
 }
 
-// Listen runs the server
+// Listen runs the server on a given port
 func (s *Server) Listen(port string) {
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/ws", s.handleWebSocket)
