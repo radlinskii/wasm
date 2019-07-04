@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,17 +8,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// Logger combines std output and std error loggers
-type Logger struct {
+// Server combines std output and std error loggers
+type Server struct {
 	Err  *log.Logger
 	Info *log.Logger
-}
-
-// GetLoggers is initializing the loggers
-func GetLoggers() *Logger {
-	return &Logger{
-		Err:  log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
-		Info: log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)}
 }
 
 var upgrader = websocket.Upgrader{
@@ -27,54 +19,56 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Home Page")
+// GetServer is initializing the loggers
+func GetServer() *Server {
+	return &Server{
+		Err:  log.New(os.Stderr, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
+		Info: log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)}
 }
 
-func wsEndpoint(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println(err)
+		s.Err.Println(err)
 	}
 
 	// helpful log statement to show connections
-	log.Println("Client Connected")
+	s.Info.Println("Client Connected")
 	err = ws.WriteMessage(1, []byte("Hi Client!"))
 	if err != nil {
-		log.Println(err)
+		s.Err.Println(err)
 	}
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
-	reader(ws)
+	s.listenOnWebSocket(ws)
 }
 
-func reader(conn *websocket.Conn) {
+func (s *Server) listenOnWebSocket(conn *websocket.Conn) {
 	for {
 		// read in a message
 		messageType, p, err := conn.ReadMessage()
 		if err != nil {
-			log.Println(err)
+			s.Err.Println(err)
 			return
 		}
 		// print out that message for clarity
-		fmt.Println(string(p))
+		s.Info.Println(string(p))
 
 		if err := conn.WriteMessage(messageType, []byte("did you just say \""+string(p)+"\"?")); err != nil {
-			log.Println(err)
+			s.Err.Println(err)
 			return
 		}
-
 	}
 }
 
-// Run runs the server
-func Run(port string, logger *Logger) {
+// Listen runs the server
+func (s *Server) Listen(port string) {
 	http.Handle("/", http.FileServer(http.Dir("public")))
-	http.HandleFunc("/ws", wsEndpoint)
+	http.HandleFunc("/ws", s.handleWebSocket)
 
-	logger.Info.Printf("Server running on PORT: %s\n", port)
+	s.Info.Printf("Server running on PORT: %s\n", port)
 
-	logger.Err.Fatal(http.ListenAndServe(":"+port, nil))
+	s.Err.Fatal(http.ListenAndServe(":"+port, nil))
 }

@@ -8,15 +8,15 @@ import (
 )
 
 func main() {
-	logger := server.GetLoggers()
+	s := server.GetServer()
 
-	logger.Info.Println("Starting the server")
+	s.Info.Println("Starting the server")
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		err := fmt.Errorf("PORT is not specified")
-		logger.Err.Fatalln(err)
+		s.Err.Fatalln(err)
 	}
 
-	server.Run(port, logger)
+	s.Listen(port)
 }

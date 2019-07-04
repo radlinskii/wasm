@@ -9,6 +9,9 @@ go:
 env:
   - GO111MODULE=on
 
+script:
+  go test -v ./... -cover
+
 deploy:
   provider: heroku
   app: wasm-playground
