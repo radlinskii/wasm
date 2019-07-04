@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputComponent Should match snapshot 1`] = `
+<div
+  className="root"
+>
+  <label
+    htmlFor="input"
+  >
+    Type your message here: 
+  </label>
+  <input
+    id="input"
+    name="input"
+    type="text"
+  />
+  <button
+    id="button"
+  >
+    Send
+  </button>
+</div>
+`;
