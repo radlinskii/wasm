@@ -1,10 +1,8 @@
-services:
-  - docker
 jobs:
   include:
     - stage: test
-    - name: test go
-    - language: go
+      name: Test Go
+      language: go
       sudo: false
       go:
       - "1.12"
@@ -12,8 +10,8 @@ jobs:
         - GO111MODULE=on
       script:
         go test -v ./... -cover
-    - name: test node
-    - language: node_js
+    - name: Test Node
+      language: node_js
       node_js:
       - "10"
       install:
@@ -21,7 +19,14 @@ jobs:
       script:
       - npm t
     - stage: deploy
+      name: Deploy to Heroku
+      language: minimal
+      services:
+        - docker
       deploy:
         provider: heroku
         app: wasm-playground
         api_key: $HEROKU_API_KEY
+
+notifications:
+  email: false
