@@ -1,22 +1,26 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/radlinskii/dotenv"
 	"github.com/radlinskii/wasm/server"
 )
 
 func main() {
 	s := server.GetServer()
 
-	s.Info.Println("Starting the server")
+	err := dotenv.SetEnv()
+	if err != nil {
+		s.Err.Fatalln(err)
+	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		err := fmt.Errorf("PORT is not specified")
-		s.Err.Fatalln(err)
+		s.Err.Fatalln("PORT is not specified")
 	}
+
+	s.Info.Println("Starting the server")
 
 	s.Listen(port)
 }

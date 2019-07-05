@@ -1,6 +1,7 @@
 node_modules
 .idea
 .vscode
+.env
 ./wasm
 public/bundle.js
 public/wasm/**.js
