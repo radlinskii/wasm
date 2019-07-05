@@ -20,7 +20,7 @@ Web Assembly in actual project!
 
 ### Local Development
 
-1. Specify `PORT` environment variable to number of your choice.
+1. Specify `PORT` environment variable to number of your choice. You can use `.env` file.
 2. Run `go run server.go` to serve static files and handle requests.
 3. In new terminal tab run `npm run dev` to start off *webpack* watching for file changes in `/src/app` directory.
 
