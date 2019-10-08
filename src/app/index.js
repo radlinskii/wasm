@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Input from './components/Input/Input';
 
+const greetJS = window.cwrap('greet', 'string', ['string']);
+
 const App = () => {
     useEffect(() => {
-        const greetJS = window.cwrap('greet', 'string', ['string']);
-
         window.Module.onRuntimeInitialized = () => {
             // eslint-disable-next-line no-console
             console.log(greetJS('ignacy'));

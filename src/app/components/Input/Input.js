@@ -34,7 +34,7 @@ const Input = () => {
             console.log('Socket Error: ', error);
         };
         /* eslint-enable no-console */
-    });
+    }, []);
 
     return (
         <div className={styles.root}>
