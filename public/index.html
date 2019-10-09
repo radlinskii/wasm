@@ -9,12 +9,18 @@
     </head>
 
     <body>
-        <h1>WebAssembly Demo in React</h1>
         <div id="app"></div>
-        <script>
-            window.greetFromJS = name => `Hello ${name}, from JS!`;
-        </script>
         <script src="wasm/main.js" charset="utf-8"></script>
-        <script src="bundle.js"></script>
+        <script>
+            window.Module.onRuntimeInitialized = () => {
+                // eslint-disable-next-line no-console
+                console.log('WebAssembly Module initialized!');
+
+                const appScript = document.createElement('script');
+                appScript.src = 'bundle.js';
+
+                document.body.appendChild(appScript);
+            };
+        </script>
     </body>
 </html>
