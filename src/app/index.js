@@ -1,20 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Input from './components/Input/Input';
 
-const greetJS = window.cwrap('greet', 'string', ['string']);
+const greetFromCpp = window.cwrap('greet', 'string', ['string']);
 
 const App = () => {
-    useEffect(() => {
-        window.Module.onRuntimeInitialized = () => {
-            // eslint-disable-next-line no-console
-            console.log(greetJS('ignacy'));
-        };
-    });
+    // eslint-disable-next-line no-console
+    console.log(greetFromCpp('Browser'));
 
     return (
         <div>
-            <h1>Hello World!!!</h1>
+            <h1>WebAssembly Demo in React</h1>
             <Input />
         </div>
     );

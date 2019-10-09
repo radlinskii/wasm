@@ -5,16 +5,7 @@
 extern "C" {
 
     int main() {
-        printf("Hello from WebAssembly!\n");
-
-        char * name = "'ignacy'";
-        char script[50];
-
-        sprintf(script, "greetFromJS(%s", name);
-
-        char * string = emscripten_run_script_string("greetFromJS('ignacy')");
-
-        printf("%s\n", string);
+        printf("main.cpp initialized!\n");
 
         return 0;
     }
@@ -29,7 +20,7 @@ extern "C" {
 
     char * greet(char * name) {
         char greeting[50];
-        sprintf(greeting, "Hello %s, from C!\n", name);
+        sprintf(greeting, "%s, meet C++!\n", name);
 
         return greeting;
     }
