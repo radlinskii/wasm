@@ -3,6 +3,7 @@ node_modules
 .vscode
 .env
 ./wasm
+build/
 public/bundle.js
 public/wasm/**.js
 public/wasm/**.wasm

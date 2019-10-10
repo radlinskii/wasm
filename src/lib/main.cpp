@@ -1,9 +1,9 @@
-#include <emscripten.h>
 #include <stdio.h>
 #include <string.h>
+#include <sstream>
+#include "Animal.h"
 
 extern "C" {
-
     int main() {
         printf("main.cpp initialized!\n");
 
@@ -18,9 +18,10 @@ extern "C" {
         return n*2;
     }
 
-    char * greet(char * name) {
-        char greeting[50];
-        sprintf(greeting, "%s, meet C++!\n", name);
+    char* greet(char* name) {
+        Animal *animal = new Animal(name);
+        char *greeting = (char *) malloc(50);
+        sprintf(greeting, "%s, meet Cpp!\n", name);
 
         return greeting;
     }
