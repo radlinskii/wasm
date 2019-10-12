@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
-#include "Animal.h"
+#include "Individual/Individual.h"
+
+using namespace std;
 
 extern "C" {
     int main() {
@@ -19,9 +21,11 @@ extern "C" {
     }
 
     char* greet(char* name) {
-        Animal *animal = new Animal(name);
+        list<double> elements {1, 2, 3, 4};
+        Individual *individual = new Individual(elements);
+
         char *greeting = (char *) malloc(50);
-        sprintf(greeting, "%s, meet Cpp!\n", name);
+        sprintf(greeting, "%s, meet Cpp!\n", individual->to_string().c_str());
 
         return greeting;
     }
