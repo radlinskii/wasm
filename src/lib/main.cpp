@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
-#include "Animal.h"
+#include "Individual.h"
 
 extern "C" {
     int main() {
@@ -19,9 +19,9 @@ extern "C" {
     }
 
     char* greet(char* name) {
-        Animal *animal = new Animal(name);
+        Individual *individual = new Individual(name);
         char *greeting = (char *) malloc(50);
-        sprintf(greeting, "%s, meet Cpp!\n", name);
+        sprintf(greeting, "%s, meet Cpp!\n", individual->getName());
 
         return greeting;
     }
