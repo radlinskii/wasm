@@ -31,9 +31,9 @@ double Individual::evaluate(double evalFunc(Individual*, int)) {
 }
 
 string Individual::to_string() {
-    std::string res;
+    string res;
     for(double e : elements) {
-        res += std::to_string(e) + std::string(", ");
+        res += std::to_string(e) + string(", ");
     }
 
     res.erase(res.end() - 2, res.end());
