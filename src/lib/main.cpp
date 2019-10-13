@@ -11,21 +11,25 @@ extern "C" {
         return 0;
     }
 
-    int getNum() {
-        return 42;
+    char* greet(char *name) {
+        char *greeting = (char *) malloc(50);
+        sprintf(greeting, "%s, meet C++!\n", name);
+
+        return greeting;
     }
 
-    int getDoubleNum(int n) {
-        return n*2;
-    }
+    char* calculate(double *elements, int len) {
+        vector<double> elementsVector;
 
-    char* greet(const char* name) {
-        vector<double> elements {2.20, 1.57};
-        Individual *individual = new Individual(elements);
+        for (int i = 0; i < len; i++) {
+            elementsVector.push_back(elements[i]);
+        }
+
+        Individual *individual = new Individual(elementsVector);
         double outcome = individual->evaluate(new MichalewiczFuncion);
 
         char *greeting = (char *) malloc(50);
-        sprintf(greeting, "%s, meet Cpp! %.2f \n", name, outcome);
+        sprintf(greeting, "calculation result: %f \n", outcome);
 
         return greeting;
     }
