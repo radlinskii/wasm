@@ -2,16 +2,16 @@
 
 using namespace std;
 
-Individual::Individual(list<double> elements){
+Individual::Individual(vector<double> elements){
     this->elements = elements;
     this->dimensions = elements.size();
 };
 Individual::~Individual(){};
 
-list<double> Individual::getElements(){
+vector<double> Individual::getElements(){
     return this->elements;
 };
-void Individual::setElements(list<double> elements){
+void Individual::setElements(vector<double> elements){
     this->elements = elements;
     this->dimensions = elements.size();
 };
@@ -24,8 +24,8 @@ int Individual::getDimensions(){
     return this->dimensions;
 };
 
-double Individual::evaluate(double evalFunc(Individual*, int)) {
-    this->fitness = evalFunc(this, this->dimensions);
+double Individual::evaluate(FitnessFunction *f) {
+    this->fitness = f->evaluate(this->elements);
 
     return this->fitness;
 }
