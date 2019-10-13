@@ -1,26 +1,32 @@
 #include <string>
-#include <list>
+#include <vector>
+#include "../FitnessFunctions/FitnessFunction.cpp"
 
 using namespace std;
+
+#ifndef INDIVIDUAL_H
+#define INDIVIDUAL_H
 
 class Individual
 {
 private:
     double fitness;
     int dimensions;
-    list<double> elements;
+    vector<double> elements;
 public:
-    Individual(list<double> elements);
+    Individual(vector<double> elements);
     ~Individual();
 
-    list<double> getElements();
-    void setElements(list<double> elements);
+    vector<double> getElements();
+    void setElements(vector<double> elements);
 
     double getFitness();
 
     int getDimensions();
 
-    double evaluate(double evalFunc(Individual*, int));
+    double evaluate(FitnessFunction *);
 
     string to_string();
 };
+
+#endif

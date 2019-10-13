@@ -12,7 +12,13 @@
             "jsx": true
         }
     },
-    "plugins": ["eslint-plugin-babel", "react-hooks", "react", "prettier", "jest"],
+    "plugins": [
+        "eslint-plugin-babel",
+        "react-hooks",
+        "react",
+        "prettier",
+        "jest"
+    ],
     "extends": [
         "airbnb-base",
         "plugin:react/recommended",
@@ -79,6 +85,7 @@
                 ]
             }
         ],
+        "no-underscore-dangle": 0,
         "no-plusplus": [
             "error",
             {
