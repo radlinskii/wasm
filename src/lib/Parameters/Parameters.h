@@ -1,5 +1,8 @@
 #include <tuple>
 
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
+
 using namespace std;
 
 class FitnessFunction;
@@ -14,7 +17,7 @@ class Parameters {
         tuple<double, double> domain;
         FitnessFunction *fitnessFunction;
     public:
-    Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction *fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction *fitnessFunction);
         Parameters();
         ~Parameters();
 
@@ -33,3 +36,5 @@ class Parameters {
         FitnessFunction *getFitnessFunction();
         void setFitnessFunction(FitnessFunction *fitnessFunction);
 };
+
+#endif
