@@ -1,11 +1,12 @@
 #include <string>
 #include <vector>
-#include "../FitnessFunctions/FitnessFunction.cpp"
-
-using namespace std;
 
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
+
+#include "../FitnessFunctions/FitnessFunction.cpp"
+
+using namespace std;
 
 class Individual
 {
