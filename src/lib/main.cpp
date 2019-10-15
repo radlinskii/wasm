@@ -2,6 +2,7 @@
 #include <string.h>
 #include <sstream>
 #include "Individual/Individual.h"
+#include "FitnessFunctions/MichalewiczFunction.cpp"
 
 using namespace std;
 extern "C" {
@@ -26,7 +27,7 @@ extern "C" {
         }
 
         Individual *individual = new Individual(elementsVector);
-        double outcome = individual->evaluate(new MichalewiczFuncion);
+        double outcome = individual->evaluate(new MichalewiczFunction);
 
         char *greeting = (char *) malloc(50);
         sprintf(greeting, "calculation result: %f \n", outcome);
