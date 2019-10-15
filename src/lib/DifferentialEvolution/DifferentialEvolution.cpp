@@ -1,6 +1,9 @@
 #include "DifferentialEvolution.h"
 
-DifferentialEvolution::DifferentialEvolution(Population population, Parameters parameters){};
+DifferentialEvolution::DifferentialEvolution(Population population, Parameters parameters){
+    this->population = population;
+    this->parameters = parameters;
+};
 DifferentialEvolution::~DifferentialEvolution(){};
 
 Population DifferentialEvolution::getPopulation(){
