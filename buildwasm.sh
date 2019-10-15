@@ -1,6 +1,23 @@
 emcc -std=c++17 -c ./src/lib/main.cpp -o ./build/main.o
 emcc -std=c++17 -c ./src/lib/Individual/Individual.cpp -o ./build/Individual.o
 emcc -std=c++17 -c ./src/lib/FitnessFunctions/FitnessFunction.cpp -o ./build/FitnessFunction.o
+emcc -std=c++17 -c ./src/lib/FitnessFunctions/MichalewiczFunction.cpp -o ./build/MichalewiczFunction.o
 emcc -std=c++17 -c ./src/lib/Parameters/Parameters.cpp -o ./build/Parameters.o
 emcc -std=c++17 -c ./src/lib/Population/Population.cpp -o ./build/Population.o
-emcc ./build/Population.o ./build/Parameters.o ./build/FitnessFunction.o ./build/Individual.o ./build/main.o  -s FORCE_FILESYSTEM=1 -s WASM=1 -O2 -s EXPORTED_FUNCTIONS="['_main', '_greet', '_calculate']" -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' -o ./public/wasm/main.js
+emcc -std=c++17 -c ./src/lib/DifferentialEvolution/DifferentialEvolution.cpp -o ./build/DifferentialEvolution.o
+
+emcc \
+./build/DifferentialEvolution.o \
+./build/Population.o \
+./build/Parameters.o \
+./build/MichalewiczFunction.o \
+./build/FitnessFunction.o \
+./build/Individual.o \
+./build/main.o \
+\
+-s FORCE_FILESYSTEM=1 \
+-s WASM=1 -O2 \
+-s EXPORTED_FUNCTIONS="['_main', '_greet', '_calculate']" \
+-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
+\
+-o ./public/wasm/main.js
