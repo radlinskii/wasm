@@ -66,9 +66,5 @@ Individual* DifferentialEvolution::evaluate(){
 
     this->populate();
 
-    for (Individual i : this->population->getSolutions()) {
-        printf("%s\n", i.to_string().c_str());
-    }
-
     return nullptr;
 };
