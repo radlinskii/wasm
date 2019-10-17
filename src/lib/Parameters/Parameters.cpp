@@ -1,6 +1,6 @@
 #include "Parameters.h"
 
-Parameters::Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction *fitnessFunction) {
+Parameters::Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction) {
     this->f = f;
     this->cr = cr;
     this->agentCount = agentCount;
@@ -59,9 +59,16 @@ void Parameters::setDomain(tuple<double, double> domain){
     this->domain = domain;
 };
 
-FitnessFunction *Parameters::getFitnessFunction(){
+FitnessFunction* Parameters::getFitnessFunction(){
     return this->fitnessFunction;
 };
-void Parameters::setFitnessFunction(FitnessFunction *fitnessFunction){
+void Parameters::setFitnessFunction(FitnessFunction* fitnessFunction){
     this->fitnessFunction = fitnessFunction;
+};
+
+double Parameters::getLowerDomainBound (){
+    return get<0>(this->domain);
+};
+double Parameters::getHigherDomainBound (){
+    return get<1>(this->domain);
 };

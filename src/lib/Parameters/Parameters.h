@@ -15,9 +15,9 @@ class Parameters {
         int agentCount;
         int dimensions;
         tuple<double, double> domain;
-        FitnessFunction *fitnessFunction;
+        FitnessFunction* fitnessFunction;
     public:
-        Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction *fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction);
         Parameters();
         ~Parameters();
 
@@ -33,8 +33,10 @@ class Parameters {
         void setDimensions(int dimensions);
         tuple<double, double> getDomain();
         void setDomain(tuple<double, double> domain);
-        FitnessFunction *getFitnessFunction();
-        void setFitnessFunction(FitnessFunction *fitnessFunction);
+        FitnessFunction* getFitnessFunction();
+        void setFitnessFunction(FitnessFunction* fitnessFunction);
+        double getLowerDomainBound ();
+        double getHigherDomainBound ();
 };
 
 #endif

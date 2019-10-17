@@ -25,7 +25,7 @@ public:
 
     int getDimensions();
 
-    double evaluate(FitnessFunction *);
+    double evaluate(FitnessFunction*);
 
     string to_string();
 };

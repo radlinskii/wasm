@@ -1,21 +1,45 @@
 #include "DifferentialEvolution.h"
 
-DifferentialEvolution::DifferentialEvolution(Population population, Parameters parameters){
-    this->population = population;
+DifferentialEvolution::DifferentialEvolution(Parameters* parameters){
     this->parameters = parameters;
+    default_random_engine re;
+    this->randomEngine = re;
+    this->randomEngine.seed(time(NULL));
 };
 DifferentialEvolution::~DifferentialEvolution(){};
 
-Population DifferentialEvolution::getPopulation(){
+Population* DifferentialEvolution::getPopulation(){
     return this->population;
 };
-void DifferentialEvolution::setPopulation(Population population){
+void DifferentialEvolution::setPopulation(Population* population){
     this->population = population;
 };
-Parameters DifferentialEvolution::getParameters(){
-    return this->parameters;};
-void DifferentialEvolution::setParameters(Parameters parameters){
+Parameters* DifferentialEvolution::getParameters(){
+    return this->parameters;
+};
+void DifferentialEvolution::setParameters(Parameters* parameters){
     this->parameters = parameters;
+};
+
+double DifferentialEvolution::getRandom(double min, double max) {
+    uniform_real_distribution<double> unif(min, max);
+
+    return unif(this->randomEngine);
+}
+
+void DifferentialEvolution::populate(){
+    vector<Individual> individuals;
+
+    for (int i = 0; i < this->parameters->getAgentCount(); i++) {
+        vector<double> v;
+        for (int j = 0; j < this->parameters->getDimensions(); j++) {
+            v.push_back(this->getRandom(this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound()));
+        }
+        Individual* individual = new Individual(v);
+        individuals.push_back(*individual);
+    }
+
+    this->population = new Population(individuals);
 };
 
 Individual* DifferentialEvolution::evaluate(){
@@ -39,6 +63,12 @@ Individual* DifferentialEvolution::evaluate(){
                 iter = iter + 1
                 go back to step #3
     */
+
+    this->populate();
+
+    for (Individual i : this->population->getSolutions()) {
+        printf("%s\n", i.to_string().c_str());
+    }
 
     return nullptr;
 };
