@@ -1,4 +1,5 @@
 #include <tuple>
+#include <stdio.h>
 
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
@@ -11,15 +12,17 @@ class Parameters {
     private:
         double f;
         double cr;
-        int iterations;
+        int maxNumOfIterations;
         int agentCount;
         int dimensions;
         tuple<double, double> domain;
-        FitnessFunction *fitnessFunction;
+        FitnessFunction* fitnessFunction;
     public:
-        Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction *fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int maxNumOfIterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction);
         Parameters();
         ~Parameters();
+
+        void ensureFBoundaries(double);
 
         double getF();
         void setF(double f);
@@ -27,14 +30,16 @@ class Parameters {
         void setCR(double cr);
         int getAgentCount();
         void setAgentCount(int agentCount);
-        int getIterations();
-        void setIterations(int iterations);
+        int getMaxNumOfIterations();
+        void setMaxNumOfIterations(int maxNumOfIterations);
         int getDimensions();
         void setDimensions(int dimensions);
         tuple<double, double> getDomain();
         void setDomain(tuple<double, double> domain);
-        FitnessFunction *getFitnessFunction();
-        void setFitnessFunction(FitnessFunction *fitnessFunction);
+        FitnessFunction* getFitnessFunction();
+        void setFitnessFunction(FitnessFunction* fitnessFunction);
+        double getLowerDomainBound ();
+        double getHigherDomainBound ();
 };
 
 #endif

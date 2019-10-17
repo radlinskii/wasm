@@ -72,7 +72,7 @@ Individual* Population::getBest(){
     return &individuals[0];
 };
 
-void Population::evaluate(FitnessFunction *fitnessFunction){
+void Population::evaluate(FitnessFunction* fitnessFunction){
     for (Individual i : solutions) {
             i.evaluate(fitnessFunction);
         }

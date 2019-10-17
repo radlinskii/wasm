@@ -1,19 +1,28 @@
 #include "Parameters.h"
 
-Parameters::Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction *fitnessFunction) {
-    this->f = f;
+void Parameters::ensureFBoundaries(double f) {
+    if (f > 2.0 || f < 0.0) {
+        printf("Parameter F should have value in range [0, 2]. set to 0.5\n");
+        this->f = 0.5;
+    } else {
+        this->f = f;
+    }
+}
+
+Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfIterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction) {
     this->cr = cr;
     this->agentCount = agentCount;
-    this->iterations = iterations;
+    this->maxNumOfIterations = maxNumOfIterations;
     this->dimensions = dimensions;
     this->domain = domain;
     this->fitnessFunction = fitnessFunction;
+    ensureFBoundaries(f);
 };
 Parameters::Parameters() {
     this->f = 0.5;
     this->cr = 0.9;
     this->agentCount = 20;
-    this->iterations = 100;
+    this->maxNumOfIterations = 100;
 };
 Parameters::~Parameters(){};
 
@@ -21,7 +30,7 @@ double Parameters::getF(){
     return this->f;
 };
 void Parameters::setF(double f){
-    this->f = f;
+    ensureFBoundaries(f);
 };
 
 double Parameters::getCR(){
@@ -38,11 +47,11 @@ void Parameters::setAgentCount(int agentCount){
     this->agentCount = agentCount;
 };
 
-int Parameters::getIterations(){
-    return this->iterations;
+int Parameters::getMaxNumOfIterations(){
+    return this->maxNumOfIterations;
 };
-void Parameters::setIterations(int iterations){
-    this->iterations = iterations;
+void Parameters::setMaxNumOfIterations(int maxNumOfIterations){
+    this->maxNumOfIterations = maxNumOfIterations;
 };
 
 int Parameters::getDimensions(){
@@ -59,9 +68,16 @@ void Parameters::setDomain(tuple<double, double> domain){
     this->domain = domain;
 };
 
-FitnessFunction *Parameters::getFitnessFunction(){
+FitnessFunction* Parameters::getFitnessFunction(){
     return this->fitnessFunction;
 };
-void Parameters::setFitnessFunction(FitnessFunction *fitnessFunction){
+void Parameters::setFitnessFunction(FitnessFunction* fitnessFunction){
     this->fitnessFunction = fitnessFunction;
+};
+
+double Parameters::getLowerDomainBound (){
+    return get<0>(this->domain);
+};
+double Parameters::getHigherDomainBound (){
+    return get<1>(this->domain);
 };

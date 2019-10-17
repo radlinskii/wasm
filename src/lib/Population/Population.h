@@ -28,7 +28,7 @@ class Population {
         double getTotalSumFitness();
 
         Individual* getBest();
-        void evaluate(FitnessFunction *fitnessFunction);
+        void evaluate(FitnessFunction* fitnessFunction);
 };
 
 #endif
