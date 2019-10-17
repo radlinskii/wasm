@@ -1,13 +1,22 @@
 #include "Parameters.h"
 
+void Parameters::ensureFBoundaries(double f) {
+    if (f > 2.0 || f < 0.0) {
+        printf("Parameter F should have value in range [0, 2]. set to 0.5\n");
+        this->f = 0.5;
+    } else {
+        this->f = f;
+    }
+}
+
 Parameters::Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction) {
-    this->f = f;
     this->cr = cr;
     this->agentCount = agentCount;
     this->iterations = iterations;
     this->dimensions = dimensions;
     this->domain = domain;
     this->fitnessFunction = fitnessFunction;
+    ensureFBoundaries(f);
 };
 Parameters::Parameters() {
     this->f = 0.5;
@@ -21,7 +30,7 @@ double Parameters::getF(){
     return this->f;
 };
 void Parameters::setF(double f){
-    this->f = f;
+    ensureFBoundaries(f);
 };
 
 double Parameters::getCR(){

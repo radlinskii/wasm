@@ -1,4 +1,5 @@
 #include <tuple>
+#include <stdio.h>
 
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
@@ -20,6 +21,8 @@ class Parameters {
         Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction);
         Parameters();
         ~Parameters();
+
+        void ensureFBoundaries(double);
 
         double getF();
         void setF(double f);

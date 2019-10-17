@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <string.h>
-#include <sstream>
 #include "Population/Population.h"
 #include "Parameters/Parameters.h"
 #include "DifferentialEvolution/DifferentialEvolution.h"
