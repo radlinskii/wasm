@@ -9,10 +9,10 @@ void Parameters::ensureFBoundaries(double f) {
     }
 }
 
-Parameters::Parameters(double f, double cr, int agentCount, int iterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction) {
+Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfIterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction) {
     this->cr = cr;
     this->agentCount = agentCount;
-    this->iterations = iterations;
+    this->maxNumOfIterations = maxNumOfIterations;
     this->dimensions = dimensions;
     this->domain = domain;
     this->fitnessFunction = fitnessFunction;
@@ -22,7 +22,7 @@ Parameters::Parameters() {
     this->f = 0.5;
     this->cr = 0.9;
     this->agentCount = 20;
-    this->iterations = 100;
+    this->maxNumOfIterations = 100;
 };
 Parameters::~Parameters(){};
 
@@ -47,11 +47,11 @@ void Parameters::setAgentCount(int agentCount){
     this->agentCount = agentCount;
 };
 
-int Parameters::getIterations(){
-    return this->iterations;
+int Parameters::getMaxNumOfIterations(){
+    return this->maxNumOfIterations;
 };
-void Parameters::setIterations(int iterations){
-    this->iterations = iterations;
+void Parameters::setMaxNumOfIterations(int maxNumOfIterations){
+    this->maxNumOfIterations = maxNumOfIterations;
 };
 
 int Parameters::getDimensions(){

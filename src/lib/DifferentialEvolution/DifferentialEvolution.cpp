@@ -66,5 +66,10 @@ Individual* DifferentialEvolution::evaluate(){
 
     this->populate();
 
+    while(this->parameters->getMaxNumOfIterations() + 1) {
+
+        this->parameters->setMaxNumOfIterations(this->parameters->getMaxNumOfIterations() - 1);
+    }
+
     return nullptr;
 };
