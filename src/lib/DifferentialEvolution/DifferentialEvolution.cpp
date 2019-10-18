@@ -42,6 +42,52 @@ void DifferentialEvolution::populate(){
     this->population = new Population(individuals);
 };
 
+Individual* ensureBoundaries(Individual *donor, double lowerBoundary, double highBoundary) {
+    vector<double> correctElements;
+    for (int i = 0; i < donor->getDimensions(); i++){
+        if (donor->getElements()[i] < lowerBoundary) {
+            correctElements.push_back(lowerBoundary);
+        } else if (donor->getElements()[i] > highBoundary) {
+            correctElements.push_back(highBoundary);
+        } else {
+            correctElements.push_back(donor->getElements()[i]);
+        }
+    }
+
+    donor->setElements(correctElements);
+
+    return donor;
+}
+
+Individual* DifferentialEvolution::mutate(int index) {
+    vector<Individual> candidates;
+    vector<Individual> individuals = this->population->getSolutions();
+    Individual current = individuals[index];
+
+    individuals.erase(individuals.begin() + index);
+
+    sample(individuals.begin(), individuals.end(), candidates.begin(), 3, this->randomEngine);
+    Individual c1 = candidates[0];
+    Individual c2 = candidates[1];
+    Individual c3 = candidates[2];
+
+    // (c2−c3)
+    vector<double> diff;
+    for (int i = 0; i < this->parameters->getDimensions(); i++) {
+        diff.push_back(c2.getElements()[i] - c3.getElements()[i]);
+    }
+
+    // v=c1+F*(c2−c3)
+    vector<double> mutatedElements;
+    for (int i = 0; i < this->parameters->getDimensions(); i++) {
+        mutatedElements.push_back(c1.getElements()[i] + (this->getParameters()->getF() * diff[i]));
+    }
+
+    Individual* donor = new Individual(mutatedElements);
+
+    return ensureBoundaries(donor, this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound());
+}
+
 Individual* DifferentialEvolution::evaluate(){
     /*
     1) Initialize a random population of individuals throughout the search space.
@@ -67,6 +113,11 @@ Individual* DifferentialEvolution::evaluate(){
     this->populate();
 
     while(this->parameters->getMaxNumOfIterations() + 1) {
+        for (int i = 0; i < this->parameters->getAgentCount(); i++) {
+            Individual* donor = this->mutate(i);
+
+            printf("original: %s | donor: %s\n", this->population->getSolutions()[i].to_string().c_str(), donor->to_string().c_str());
+        }
 
         this->parameters->setMaxNumOfIterations(this->parameters->getMaxNumOfIterations() - 1);
     }
