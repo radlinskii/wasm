@@ -25,7 +25,7 @@ class DifferentialEvolution {
         double getRandom(double, double);
         void populate();
         Individual mutate(int);
-        Individual recombinate(Individual, Individual);
+        void recombinate(Individual*, Individual);
         Individual* evaluate();
 };
 
