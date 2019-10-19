@@ -42,24 +42,22 @@ void DifferentialEvolution::populate(){
     this->population = new Population(individuals);
 };
 
-Individual ensureBoundaries(Individual donor, double lowerBoundary, double highBoundary) {
+void ensureBoundaries(Individual* donor, double lowerBoundary, double highBoundary) {
     vector<double> correctElements;
-    for (int i = 0; i < donor.getDimensions(); i++){
-        if (donor.getElements()[i] < lowerBoundary) {
+    for (int i = 0; i < donor->getDimensions(); i++){
+        if (donor->getElements()[i] < lowerBoundary) {
             correctElements.push_back(lowerBoundary);
-        } else if (donor.getElements()[i] > highBoundary) {
+        } else if (donor->getElements()[i] > highBoundary) {
             correctElements.push_back(highBoundary);
         } else {
-            correctElements.push_back(donor.getElements()[i]);
+            correctElements.push_back(donor->getElements()[i]);
         }
     }
 
-    donor.setElements(correctElements);
-
-    return donor;
+    donor->setElements(correctElements);
 }
 
-Individual DifferentialEvolution::mutate(int index) {
+Individual* DifferentialEvolution::mutate(int index) {
     vector<Individual*> candidates;
     vector<Individual*> individuals = this->population->getSolutions();
     Individual* current = individuals[index];
@@ -85,15 +83,17 @@ Individual DifferentialEvolution::mutate(int index) {
 
     Individual* donor = new Individual(mutatedElements);
 
-    return ensureBoundaries(*donor, this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound());
+    ensureBoundaries(donor, this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound());
+
+    return donor;
 }
 
-void DifferentialEvolution::recombinate(Individual* current, Individual donor) {
+void DifferentialEvolution::recombinate(Individual* current, Individual* donor) {
     vector<double> recombinatedElements;
     for (int i = 0; i < this->parameters->getDimensions(); i++) {
         if (getRandom(0.0, 1.0) <= this->parameters->getCR()) {
             printf("recombinated\n");
-            recombinatedElements.push_back(donor.getElements()[i]);
+            recombinatedElements.push_back(donor->getElements()[i]);
         } else {
             recombinatedElements.push_back(current->getElements()[i]);
         }
@@ -127,18 +127,16 @@ Individual* DifferentialEvolution::evaluate(){
 
     this->populate();
 
-    while(this->parameters->getMaxNumOfIterations() + 1) {
+    int iter = this->parameters->getMaxNumOfIterations() + 1;
+    while(iter) {
         for (int i = 0; i < this->parameters->getAgentCount(); i++) {
             Individual* current = this->population->getSolutions()[i];
-            Individual donor = this->mutate(i);
 
-            printf("original from population: %s | donor: %s\n", current->to_string().c_str(), donor.to_string().c_str());
+            Individual* donor = this->mutate(i);
             this->recombinate(current, donor);
-
-            printf("recombinated: %s | original from population: %s\n", current->to_string().c_str(), this->population->getSolutions()[i]->to_string().c_str());
         }
 
-        this->parameters->setMaxNumOfIterations(this->parameters->getMaxNumOfIterations() - 1);
+        iter--;
     }
 
     return nullptr;
