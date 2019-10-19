@@ -28,7 +28,7 @@ double DifferentialEvolution::getRandom(double min, double max) {
 }
 
 void DifferentialEvolution::populate(){
-    vector<Individual> individuals;
+    vector<Individual*> individuals;
 
     for (int i = 0; i < this->parameters->getAgentCount(); i++) {
         vector<double> v;
@@ -36,7 +36,7 @@ void DifferentialEvolution::populate(){
             v.push_back(this->getRandom(this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound()));
         }
         Individual* individual = new Individual(v);
-        individuals.push_back(*individual);
+        individuals.push_back(individual);
     }
 
     this->population = new Population(individuals);
@@ -60,27 +60,27 @@ Individual ensureBoundaries(Individual donor, double lowerBoundary, double highB
 }
 
 Individual DifferentialEvolution::mutate(int index) {
-    vector<Individual> candidates;
-    vector<Individual> individuals = this->population->getSolutions();
-    Individual current = individuals[index];
+    vector<Individual*> candidates;
+    vector<Individual*> individuals = this->population->getSolutions();
+    Individual* current = individuals[index];
 
     individuals.erase(individuals.begin() + index);
 
     sample(individuals.begin(), individuals.end(), candidates.begin(), 3, this->randomEngine);
-    Individual c1 = candidates[0];
-    Individual c2 = candidates[1];
-    Individual c3 = candidates[2];
+    Individual* c1 = candidates[0];
+    Individual* c2 = candidates[1];
+    Individual* c3 = candidates[2];
 
     // (c2−c3)
     vector<double> diff;
     for (int i = 0; i < this->parameters->getDimensions(); i++) {
-        diff.push_back(c2.getElements()[i] - c3.getElements()[i]);
+        diff.push_back(c2->getElements()[i] - c3->getElements()[i]);
     }
 
     // v=c1+F*(c2−c3)
     vector<double> mutatedElements;
     for (int i = 0; i < this->parameters->getDimensions(); i++) {
-        mutatedElements.push_back(c1.getElements()[i] + (this->getParameters()->getF() * diff[i]));
+        mutatedElements.push_back(c1->getElements()[i] + (this->getParameters()->getF() * diff[i]));
     }
 
     Individual* donor = new Individual(mutatedElements);
@@ -98,6 +98,8 @@ Individual DifferentialEvolution::recombinate(Individual current, Individual don
             recombinatedElements.push_back(current.getElements()[i]);
         }
     }
+    Individual* recombinated = new Individual(recombinatedElements);
+
     current.setElements(recombinatedElements);
 
     return current;
@@ -129,14 +131,14 @@ Individual* DifferentialEvolution::evaluate(){
 
     while(this->parameters->getMaxNumOfIterations() + 1) {
         for (int i = 0; i < this->parameters->getAgentCount(); i++) {
-            Individual current = this->population->getSolutions()[i];
+            Individual* current = this->population->getSolutions()[i];
             Individual donor = this->mutate(i);
 
-            Individual recombinated = this->recombinate(current, donor);
+            Individual recombinated = this->recombinate(*current, donor);
+            printf("original from population: %s | donor: %s\n", current->to_string().c_str(), donor.to_string().c_str());
 
-            printf("original from population: %s | donor: %s\n", current.to_string().c_str(), recombinated.to_string().c_str());
-            current.setElements(recombinated.getElements());
-            printf("recombinated: %s | original from population: %s\n", current.to_string().c_str(), this->population->getSolutions()[i].to_string().c_str());
+            current->setElements(recombinated.getElements());
+            printf("recombinated: %s | original from population: %s\n", current->to_string().c_str(), this->population->getSolutions()[i]->to_string().c_str());
         }
 
         this->parameters->setMaxNumOfIterations(this->parameters->getMaxNumOfIterations() - 1);

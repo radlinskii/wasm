@@ -13,14 +13,14 @@ using namespace std;
 
 class Population {
     private:
-        vector<Individual> solutions;
+        vector<Individual*> solutions;
     public:
-        Population(vector<Individual> solutions);
+        Population(vector<Individual*> solutions);
         Population();
         ~Population();
 
-        vector<Individual> getSolutions();
-        void setSolutions(vector<Individual> solutions);
+        vector<Individual*> getSolutions();
+        void setSolutions(vector<Individual*> solutions);
 
         double getAverageFitness();
         double getMaximumFitness();
