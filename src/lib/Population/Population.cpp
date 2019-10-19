@@ -1,23 +1,23 @@
 #include "Population.h"
 
-Population::Population(vector<Individual> solutions){
+Population::Population(vector<Individual*> solutions){
     this->solutions = solutions;
 };
 Population::Population(){};
 Population::~Population(){};
 
-vector<Individual> Population::getSolutions(){
+vector<Individual*> Population::getSolutions(){
     return this->solutions;
 };
-void Population::setSolutions(vector<Individual> solutions){
+void Population::setSolutions(vector<Individual*> solutions){
     this->solutions = solutions;
 };
 
 double Population::getAverageFitness(){
     double sum = 0.0;
 
-    for (Individual i : solutions) {
-        sum += i.getFitness();
+    for (Individual* i : solutions) {
+        sum += i->getFitness();
     }
 
     double average = sum / this->solutions.size();
@@ -27,9 +27,9 @@ double Population::getAverageFitness(){
 double Population::getMaximumFitness(){
     double max = -DBL_MAX;
 
-    for (Individual i : solutions) {
-        if (i.getFitness() >= max) {
-            max = i.getFitness();
+    for (Individual* i : solutions) {
+        if (i->getFitness() >= max) {
+            max = i->getFitness();
         }
     }
 
@@ -38,9 +38,9 @@ double Population::getMaximumFitness(){
 double Population::getMinimumFitness(){
     double min = DBL_MAX;
 
-    for (Individual i : solutions) {
-        if (i.getFitness() <= min) {
-            min = i.getFitness();
+    for (Individual* i : solutions) {
+        if (i->getFitness() <= min) {
+            min = i->getFitness();
         }
     }
 
@@ -49,15 +49,15 @@ double Population::getMinimumFitness(){
 double Population::getTotalSumFitness(){
     double sum = 0.0;
 
-    for (Individual i : solutions) {
-        sum += i.getFitness();
+    for (Individual* i : solutions) {
+        sum += i->getFitness();
     }
 
     return sum;
 };
 
-bool comparator (Individual i, Individual j) {
-    return (i.getFitness()<j.getFitness());
+bool comparator (Individual* i, Individual* j) {
+    return (i->getFitness()<j->getFitness());
 }
 
 Individual* Population::getBest(){
@@ -65,15 +65,15 @@ Individual* Population::getBest(){
         return nullptr;
     }
 
-    vector<Individual> individuals = this->solutions;
+    vector<Individual*> individuals = this->solutions;
 
     sort(individuals.begin(), individuals.end(), comparator);
 
-    return &individuals[0];
+    return individuals[0];
 };
 
 void Population::evaluate(FitnessFunction* fitnessFunction){
-    for (Individual i : solutions) {
-            i.evaluate(fitnessFunction);
+    for (Individual* i : solutions) {
+            i->evaluate(fitnessFunction);
         }
 };
