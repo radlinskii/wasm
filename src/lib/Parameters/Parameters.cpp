@@ -9,12 +9,10 @@ void Parameters::ensureFBoundaries(double f) {
     }
 }
 
-Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfIterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction) {
+Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfIterations, FitnessFunction* fitnessFunction) {
     this->cr = cr;
     this->agentCount = agentCount;
     this->maxNumOfIterations = maxNumOfIterations;
-    this->dimensions = dimensions;
-    this->domain = domain;
     this->fitnessFunction = fitnessFunction;
     ensureFBoundaries(f);
 };
@@ -55,17 +53,17 @@ void Parameters::setMaxNumOfIterations(int maxNumOfIterations){
 };
 
 int Parameters::getDimensions(){
-    return this->dimensions;
+    return this->fitnessFunction->getDimensions();
 };
 void Parameters::setDimensions(int dimensions){
-    this->dimensions = dimensions;
+    this->fitnessFunction->setDimensions(dimensions);
 };
 
 tuple<double, double> Parameters::getDomain(){
-    return this->domain;
+    return this->fitnessFunction->getDomain();
 };
 void Parameters::setDomain(tuple<double, double> domain){
-    this->domain = domain;
+    this->fitnessFunction->setDomain(domain);
 };
 
 FitnessFunction* Parameters::getFitnessFunction(){
@@ -76,8 +74,8 @@ void Parameters::setFitnessFunction(FitnessFunction* fitnessFunction){
 };
 
 double Parameters::getLowerDomainBound (){
-    return get<0>(this->domain);
+    return this->fitnessFunction->getLowerDomainBound();
 };
 double Parameters::getHigherDomainBound (){
-    return get<1>(this->domain);
+    return this->fitnessFunction->getHigherDomainBound();
 };

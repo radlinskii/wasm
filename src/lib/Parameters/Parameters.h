@@ -4,9 +4,9 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-using namespace std;
+#include "../FitnessFunctions/FitnessFunction.cpp"
 
-class FitnessFunction;
+using namespace std;
 
 class Parameters {
     private:
@@ -14,11 +14,9 @@ class Parameters {
         double cr;
         int maxNumOfIterations;
         int agentCount;
-        int dimensions;
-        tuple<double, double> domain;
         FitnessFunction* fitnessFunction;
     public:
-        Parameters(double f, double cr, int agentCount, int maxNumOfIterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int maxNumOfIterations, FitnessFunction* fitnessFunction);
         Parameters();
         ~Parameters();
 

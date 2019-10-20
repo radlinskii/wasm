@@ -3,11 +3,19 @@
 #ifndef MICHALEWICZ_FUNCTION_H
 #define MICHALEWICZ_FUNCTION_H
 
-// dimensions: 2
-// bounds: 0, M_PI
 // min is at  f(2.20, 1.57) = -1.8013
 class MichalewiczFunction : public FitnessFunction {
 public:
+    MichalewiczFunction() {
+        this->domain = make_tuple(0, M_PI);
+        this->dimensions = 2;
+    }
+
+    MichalewiczFunction(int dimensions, tuple<double, double> domain) {
+        this->dimensions = dimensions;
+        this->domain = domain;
+    }
+
     double evaluate(vector<double> elements) {
         double outcome = 0;
         double sum = 0;

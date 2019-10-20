@@ -23,13 +23,14 @@ extern "C" {
     }
 
     char* calculate(double* elements, int len) {
+        FitnessFunction* f = new MichalewiczFunction();
         Parameters* params = new Parameters();
+
         params->setMaxNumOfIterations(100);
-        params->setDimensions(2);
-        params->setDomain(make_tuple(0, M_PI));
-        params->setFitnessFunction(new MichalewiczFunction());
+        params->setFitnessFunction(f);
 
         DifferentialEvolution* de = new DifferentialEvolution(params);
+
         de->evaluate();
 
         char* greeting = (char*) malloc(50);
