@@ -6,8 +6,7 @@ using namespace std;
 #ifndef FITNESS_FUNCTION_H
 #define FITNESS_FUNCTION_H
 
-class FitnessFunction
-{
+class FitnessFunction {
 public:
     virtual double evaluate(vector<double>) = 0;
 };
