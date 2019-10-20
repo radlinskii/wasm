@@ -27,7 +27,7 @@ public:
 
     double evaluate(FitnessFunction*);
 
-    string to_string();
+    string toString();
 };
 
 #endif

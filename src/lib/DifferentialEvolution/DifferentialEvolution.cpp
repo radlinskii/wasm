@@ -111,31 +111,11 @@ void DifferentialEvolution::select(Individual* current, Individual* trial) {
 }
 
 Individual* DifferentialEvolution::evaluate(){
-    /*
-    1) Initialize a random population of individuals throughout the search space.
-
-    2) while iter <= max num of generations
-
-        3) cycle through each individual in the population
-
-            3.A) perform mutation
-
-            3.B) perform recombination ("crossover" in GA lingo)
-
-            3.C) perform selection
-
-        4) if stopping criterion has been met:
-                exit and return best individual
-
-            else:
-                iter = iter + 1
-                go back to step #3
-    */
-
+    Individual* best = nullptr;
     this->populate();
 
-    int iter = this->parameters->getMaxNumOfIterations() + 1;
-    while(iter) {
+    int generationCounter = 0;
+    while(generationCounter <= this->parameters->getMaxNumOfGenerations()) {
         for (int i = 0; i < this->parameters->getAgentCount(); i++) {
             Individual* current = this->population->getSolutions()[i];
 
@@ -143,13 +123,14 @@ Individual* DifferentialEvolution::evaluate(){
             Individual* trial = this->recombinate(current, donor);
             this->select(current, trial);
 
-            printf("population average: %.3f\n" , this->population->getAverageFitness());
-            printf("population best: %.3f\n" , this->population->getMinimumFitness());
-            printf("population solution: %s\n" , this->population->getBest()->to_string().c_str());
+            best = this->population->getBest();
+
+            // if Stopping criterion has been met
+            // return best individual
         }
 
-        iter--;
+        generationCounter++;
     }
 
-    return nullptr;
+    return best;
 };

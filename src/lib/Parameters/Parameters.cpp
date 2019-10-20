@@ -9,10 +9,10 @@ void Parameters::ensureFBoundaries(double f) {
     }
 }
 
-Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfIterations, FitnessFunction* fitnessFunction) {
+Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, FitnessFunction* fitnessFunction) {
     this->cr = cr;
     this->agentCount = agentCount;
-    this->maxNumOfIterations = maxNumOfIterations;
+    this->maxNumOfGenerations = maxNumOfGenerations;
     this->fitnessFunction = fitnessFunction;
     ensureFBoundaries(f);
 };
@@ -20,7 +20,7 @@ Parameters::Parameters() {
     this->f = 0.5;
     this->cr = 0.9;
     this->agentCount = 20;
-    this->maxNumOfIterations = 100;
+    this->maxNumOfGenerations = 100;
 };
 Parameters::~Parameters(){};
 
@@ -45,11 +45,11 @@ void Parameters::setAgentCount(int agentCount){
     this->agentCount = agentCount;
 };
 
-int Parameters::getMaxNumOfIterations(){
-    return this->maxNumOfIterations;
+int Parameters::getMaxNumOfGenerations(){
+    return this->maxNumOfGenerations;
 };
-void Parameters::setMaxNumOfIterations(int maxNumOfIterations){
-    this->maxNumOfIterations = maxNumOfIterations;
+void Parameters::setMaxNumOfGenerations(int maxNumOfGenerations){
+    this->maxNumOfGenerations = maxNumOfGenerations;
 };
 
 int Parameters::getDimensions(){

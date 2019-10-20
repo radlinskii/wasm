@@ -12,11 +12,11 @@ class Parameters {
     private:
         double f;
         double cr;
-        int maxNumOfIterations;
+        int maxNumOfGenerations;
         int agentCount;
         FitnessFunction* fitnessFunction;
     public:
-        Parameters(double f, double cr, int agentCount, int maxNumOfIterations, FitnessFunction* fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, FitnessFunction* fitnessFunction);
         Parameters();
         ~Parameters();
 
@@ -28,8 +28,8 @@ class Parameters {
         void setCR(double cr);
         int getAgentCount();
         void setAgentCount(int agentCount);
-        int getMaxNumOfIterations();
-        void setMaxNumOfIterations(int maxNumOfIterations);
+        int getMaxNumOfGenerations();
+        void setMaxNumOfGenerations(int maxNumOfGenerations);
         int getDimensions();
         void setDimensions(int dimensions);
         tuple<double, double> getDomain();

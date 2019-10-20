@@ -13,6 +13,12 @@ class DifferentialEvolution {
         Population* population;
         Parameters* parameters;
         default_random_engine  randomEngine;
+
+        double getRandom(double, double);
+        void populate();
+        Individual* mutate(int);
+        Individual* recombinate(Individual*, Individual*);
+        void select(Individual*, Individual*);
     public:
         DifferentialEvolution(Parameters* parameters);
         ~DifferentialEvolution();
@@ -22,11 +28,6 @@ class DifferentialEvolution {
         Parameters* getParameters();
         void setParameters(Parameters* parameters);
 
-        double getRandom(double, double);
-        void populate();
-        Individual* mutate(int);
-        Individual* recombinate(Individual*, Individual*);
-        void select(Individual*, Individual*);
         Individual* evaluate();
 };
 

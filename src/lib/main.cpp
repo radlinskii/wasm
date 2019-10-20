@@ -23,18 +23,18 @@ extern "C" {
     }
 
     char* calculate(double* elements, int len) {
-        FitnessFunction* f = new MichalewiczFunction();
+        FitnessFunction* f = new BealeFunction();
         Parameters* params = new Parameters();
 
-        params->setMaxNumOfIterations(100);
+        params->setMaxNumOfGenerations(100);
         params->setFitnessFunction(f);
 
         DifferentialEvolution* de = new DifferentialEvolution(params);
 
-        de->evaluate();
+        Individual* solution = de->evaluate();
 
-        char* greeting = (char*) malloc(50);
-        sprintf(greeting, "Calculating...\n");
+        char* greeting = (char*) malloc(70);
+        sprintf(greeting, "Solution is: %s, with result: %.4f\n", solution->toString().c_str(), solution->getFitness());
 
         return greeting;
     }
