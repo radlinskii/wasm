@@ -15,7 +15,7 @@
     "prettier:fix": "prettier --write",
     "start": "npm run build:prod && go run main.go",
     "start:prod": "npm run build:prod && go run main.go",
-    "test": "jest && go test ./... -cover"
+    "test": "jest"
   },
   "lint-staged": {
     "*.js": [
@@ -44,7 +44,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm t"
+      "pre-push": "npm t && go test ./... -cover"
     }
   },
   "repository": {
