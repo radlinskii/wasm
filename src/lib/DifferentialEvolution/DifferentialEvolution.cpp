@@ -88,19 +88,26 @@ Individual* DifferentialEvolution::mutate(int index) {
     return donor;
 }
 
-void DifferentialEvolution::recombinate(Individual* current, Individual* donor) {
+Individual* DifferentialEvolution::recombinate(Individual* current, Individual* donor) {
     vector<double> recombinatedElements;
     for (int i = 0; i < this->parameters->getDimensions(); i++) {
         if (getRandom(0.0, 1.0) <= this->parameters->getCR()) {
-            printf("recombinated\n");
             recombinatedElements.push_back(donor->getElements()[i]);
         } else {
             recombinatedElements.push_back(current->getElements()[i]);
         }
     }
-    Individual* recombinated = new Individual(recombinatedElements);
 
-    current->setElements(recombinatedElements);
+    return new Individual(recombinatedElements);
+}
+
+void DifferentialEvolution::select(Individual* current, Individual* trial) {
+    double currentFitness = current->evaluate(this->parameters->getFitnessFunction());
+    double trialFitness = trial->evaluate(this->parameters->getFitnessFunction());
+
+    if (trialFitness < currentFitness) {
+        current->setElements(trial->getElements());
+    }
 }
 
 Individual* DifferentialEvolution::evaluate(){
@@ -133,7 +140,12 @@ Individual* DifferentialEvolution::evaluate(){
             Individual* current = this->population->getSolutions()[i];
 
             Individual* donor = this->mutate(i);
-            this->recombinate(current, donor);
+            Individual* trial = this->recombinate(current, donor);
+            this->select(current, trial);
+
+            printf("population average: %.3f\n" , this->population->getAverageFitness());
+            printf("population best: %.3f\n" , this->population->getMinimumFitness());
+            printf("population solution: %s\n" , this->population->getBest()->to_string().c_str());
         }
 
         iter--;
