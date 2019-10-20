@@ -1,91 +1,95 @@
 {
-    "name": "wasm",
-    "version": "1.0.0",
-    "description": "",
-    "scripts": {
-        "build:web": "webpack --env development",
-        "build:web:prod": "webpack --env production",
-        "build:wasm": "./buildwasm.sh",
-        "build": "npm run clean && npm run build:wasm && npm run build:web",
-        "build:prod": "npm run clean && npm run build:wasm && npm run build:web:prod",
-        "clean": "rm -rf public/**.js public/**/**.js public/**/**.wasm && npm run clean:build",
-        "clean:build": "cd build && ls | grep -v .gitkeep | xargs rm && cd ..",
-        "dev": "npm run clean && npm run build:wasm && webpack --watch  --env development",
-        "lint": "eslint src",
-        "prettier:fix": "prettier --write",
-        "precommit": "lint-staged",
-        "prepush": "npm t",
-        "start": "npm run build:prod && go run main.go",
-        "start:prod": "npm run build:prod && go run main.go",
-        "test": "jest"
-    },
-    "lint-staged": {
-        "*.js": [
-            "eslint --fix",
-            "git add"
-        ],
-        "*.json": [
-            "npm run prettier:fix",
-            "git add"
-        ],
-        "*.scss": [
-            "stylelint --syntax=scss --fix",
-            "git add"
-        ],
-        "*.go": [
-            "goimports -w",
-            "git add"
-        ]
-    },
-    "jest": {
-        "moduleNameMapper": {
-            "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/app/fileMock.js",
-            "\\.(css|less|sass|scss)$": "identity-obj-proxy"
-        }
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/radlinskii/wasm.git"
-    },
-    "author": "radlinskii",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/radlinskii/wasm/issues"
-    },
-    "homepage": "https://github.com/radlinskii/wasm#readme",
-    "dependencies": {
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.4.5",
-        "@babel/preset-env": "^7.4.5",
-        "@babel/preset-react": "^7.0.0",
-        "babel-eslint": "^10.0.1",
-        "babel-jest": "^24.8.0",
-        "babel-loader": "^8.0.6",
-        "css-loader": "^2.1.1",
-        "eslint": "^5.16.0",
-        "eslint-config-airbnb-base": "^13.1.0",
-        "eslint-config-prettier": "^4.3.0",
-        "eslint-plugin-babel": "^5.3.0",
-        "eslint-plugin-import": "^2.17.3",
-        "eslint-plugin-jest": "^22.7.2",
-        "eslint-plugin-prettier": "^3.1.0",
-        "eslint-plugin-react": "^7.13.0",
-        "eslint-plugin-react-hooks": "^1.6.0",
-        "husky": "^3.0.0",
-        "identity-obj-proxy": "^3.0.0",
-        "jest": "^24.8.0",
-        "lint-staged": "^9.0.2",
-        "node-sass": "^4.12.0",
-        "prettier": "^1.17.1",
-        "react-test-renderer": "^16.8.6",
-        "sass-loader": "^7.1.0",
-        "style-loader": "^0.23.1",
-        "stylelint": "^10.1.0",
-        "stylelint-config-standard": "^18.3.0",
-        "webpack": "^4.33.0",
-        "webpack-cli": "^3.3.2"
+  "name": "wasm",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:web": "webpack --env development",
+    "build:web:prod": "webpack --env production",
+    "build:wasm": "./buildwasm.sh",
+    "build": "npm run clean && npm run build:wasm && npm run build:web",
+    "build:prod": "npm run clean && npm run build:wasm && npm run build:web:prod",
+    "clean": "rm -rf public/**.js public/**/**.js public/**/**.wasm && npm run clean:build",
+    "clean:build": "cd build && ls | grep -v .gitkeep | xargs rm && cd ..",
+    "dev": "npm run clean && npm run build:wasm && webpack --watch  --env development",
+    "lint": "eslint src",
+    "prettier:fix": "prettier --write",
+    "start": "npm run build:prod && go run main.go",
+    "start:prod": "npm run build:prod && go run main.go",
+    "test": "jest && go test ./... -cover"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "npm run prettier:fix",
+      "git add"
+    ],
+    "*.scss": [
+      "stylelint --syntax=scss --fix",
+      "git add"
+    ],
+    "*.go": [
+      "goimports -w",
+      "git add"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/app/fileMock.js",
+      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
     }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm t"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radlinskii/wasm.git"
+  },
+  "author": "radlinskii",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/radlinskii/wasm/issues"
+  },
+  "homepage": "https://github.com/radlinskii/wasm#readme",
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jest": "^22.7.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "husky": "^3.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.8.0",
+    "lint-staged": "^9.0.2",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.17.1",
+    "react-test-renderer": "^16.8.6",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.2"
+  }
 }
