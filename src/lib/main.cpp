@@ -4,6 +4,8 @@
 #include "DifferentialEvolution/DifferentialEvolution.h"
 #include "Individual/Individual.h"
 #include "FitnessFunctions/MichalewiczFunction.cpp"
+#include "FitnessFunctions/SphereFunction.cpp"
+#include "FitnessFunctions/BealeFunction.cpp"
 
 using namespace std;
 extern "C" {
@@ -21,16 +23,18 @@ extern "C" {
     }
 
     char* calculate(double* elements, int len) {
+        FitnessFunction* f = new BealeFunction();
         Parameters* params = new Parameters();
-        params->setDimensions(2);
-        params->setDomain(make_tuple(0.0, 1000.0));
-        params->setFitnessFunction(new MichalewiczFunction());
+
+        params->setMaxNumOfGenerations(100);
+        params->setFitnessFunction(f);
 
         DifferentialEvolution* de = new DifferentialEvolution(params);
-        de->evaluate();
 
-        char* greeting = (char*) malloc(50);
-        sprintf(greeting, "Calculating...\n");
+        Individual* solution = de->evaluate();
+
+        char* greeting = (char*) malloc(70);
+        sprintf(greeting, "Solution is: %s, with result: %.4f\n", solution->toString().c_str(), solution->getFitness());
 
         return greeting;
     }

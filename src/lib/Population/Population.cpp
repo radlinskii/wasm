@@ -74,6 +74,6 @@ Individual* Population::getBest(){
 
 void Population::evaluate(FitnessFunction* fitnessFunction){
     for (Individual* i : solutions) {
-            i->evaluate(fitnessFunction);
-        }
+        i->evaluate(fitnessFunction);
+    }
 };

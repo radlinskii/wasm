@@ -4,21 +4,19 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-using namespace std;
+#include "../FitnessFunctions/FitnessFunction.cpp"
 
-class FitnessFunction;
+using namespace std;
 
 class Parameters {
     private:
         double f;
         double cr;
-        int maxNumOfIterations;
+        int maxNumOfGenerations;
         int agentCount;
-        int dimensions;
-        tuple<double, double> domain;
         FitnessFunction* fitnessFunction;
     public:
-        Parameters(double f, double cr, int agentCount, int maxNumOfIterations, int dimensions, tuple<double, double> domain, FitnessFunction* fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, FitnessFunction* fitnessFunction);
         Parameters();
         ~Parameters();
 
@@ -30,8 +28,8 @@ class Parameters {
         void setCR(double cr);
         int getAgentCount();
         void setAgentCount(int agentCount);
-        int getMaxNumOfIterations();
-        void setMaxNumOfIterations(int maxNumOfIterations);
+        int getMaxNumOfGenerations();
+        void setMaxNumOfGenerations(int maxNumOfGenerations);
         int getDimensions();
         void setDimensions(int dimensions);
         tuple<double, double> getDomain();

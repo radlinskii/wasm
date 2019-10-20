@@ -88,56 +88,49 @@ Individual* DifferentialEvolution::mutate(int index) {
     return donor;
 }
 
-void DifferentialEvolution::recombinate(Individual* current, Individual* donor) {
+Individual* DifferentialEvolution::recombinate(Individual* current, Individual* donor) {
     vector<double> recombinatedElements;
     for (int i = 0; i < this->parameters->getDimensions(); i++) {
         if (getRandom(0.0, 1.0) <= this->parameters->getCR()) {
-            printf("recombinated\n");
             recombinatedElements.push_back(donor->getElements()[i]);
         } else {
             recombinatedElements.push_back(current->getElements()[i]);
         }
     }
-    Individual* recombinated = new Individual(recombinatedElements);
 
-    current->setElements(recombinatedElements);
+    return new Individual(recombinatedElements);
+}
+
+void DifferentialEvolution::select(Individual* current, Individual* trial) {
+    double currentFitness = current->evaluate(this->parameters->getFitnessFunction());
+    double trialFitness = trial->evaluate(this->parameters->getFitnessFunction());
+
+    if (trialFitness < currentFitness) {
+        current->setElements(trial->getElements());
+    }
 }
 
 Individual* DifferentialEvolution::evaluate(){
-    /*
-    1) Initialize a random population of individuals throughout the search space.
-
-    2) while iter <= max num of generations
-
-        3) cycle through each individual in the population
-
-            3.A) perform mutation
-
-            3.B) perform recombination ("crossover" in GA lingo)
-
-            3.C) perform selection
-
-        4) if stopping criterion has been met:
-                exit and return best individual
-
-            else:
-                iter = iter + 1
-                go back to step #3
-    */
-
+    Individual* best = nullptr;
     this->populate();
 
-    int iter = this->parameters->getMaxNumOfIterations() + 1;
-    while(iter) {
+    int generationCounter = 0;
+    while(generationCounter <= this->parameters->getMaxNumOfGenerations()) {
         for (int i = 0; i < this->parameters->getAgentCount(); i++) {
             Individual* current = this->population->getSolutions()[i];
 
             Individual* donor = this->mutate(i);
-            this->recombinate(current, donor);
+            Individual* trial = this->recombinate(current, donor);
+            this->select(current, trial);
+
+            best = this->population->getBest();
+
+            // if Stopping criterion has been met
+            // return best individual
         }
 
-        iter--;
+        generationCounter++;
     }
 
-    return nullptr;
+    return best;
 };

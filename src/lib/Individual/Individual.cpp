@@ -30,13 +30,14 @@ double Individual::evaluate(FitnessFunction* f) {
     return this->fitness;
 }
 
-string Individual::to_string() {
-    string res;
+string Individual::toString() {
+    string res = "(";
     for(double e : elements) {
         res += std::to_string(e) + string(", ");
     }
 
     res.erase(res.end() - 2, res.end());
+    res += ")";
 
     return res;
 }

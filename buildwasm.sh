@@ -1,7 +1,6 @@
 emcc -std=c++17 -c ./src/lib/main.cpp -o ./build/main.o
 emcc -std=c++17 -c ./src/lib/Individual/Individual.cpp -o ./build/Individual.o
 emcc -std=c++17 -c ./src/lib/FitnessFunctions/FitnessFunction.cpp -o ./build/FitnessFunction.o
-emcc -std=c++17 -c ./src/lib/FitnessFunctions/MichalewiczFunction.cpp -o ./build/MichalewiczFunction.o
 emcc -std=c++17 -c ./src/lib/Parameters/Parameters.cpp -o ./build/Parameters.o
 emcc -std=c++17 -c ./src/lib/Population/Population.cpp -o ./build/Population.o
 emcc -std=c++17 -c ./src/lib/DifferentialEvolution/DifferentialEvolution.cpp -o ./build/DifferentialEvolution.o
@@ -10,7 +9,6 @@ emcc \
 ./build/DifferentialEvolution.o \
 ./build/Population.o \
 ./build/Parameters.o \
-./build/MichalewiczFunction.o \
 ./build/FitnessFunction.o \
 ./build/Individual.o \
 ./build/main.o \
