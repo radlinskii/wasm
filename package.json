@@ -13,7 +13,7 @@
     "dev": "npm run clean && npm run build:wasm && webpack --watch  --env development",
     "lint": "eslint src",
     "prettier:fix": "prettier --write",
-    "start": "npm run build:prod && go run main.go",
+    "start": "npm run build && go run main.go",
     "start:prod": "npm run build:prod && go run main.go",
     "test": "jest"
   },

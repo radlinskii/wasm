@@ -12,10 +12,12 @@ exports[`InputComponent Should match snapshot 1`] = `
   <input
     id="input"
     name="input"
+    onChange={[Function]}
     type="text"
   />
   <button
     id="button"
+    onClick={[Function]}
   >
     Send
   </button>

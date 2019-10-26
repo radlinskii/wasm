@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Input from './components/Input/Input';
 
@@ -36,9 +37,41 @@ const calculate = () => {
 };
 
 const App = () => {
-    // eslint-disable-next-line no-console
+    const [isWebSocketOpen, setWebSocketOpen] = useState(false);
+
     console.log(greetFromCpp('Browser'));
-    calculate();
+
+    useEffect(() => {
+        const protocol = process.env.NODE_ENV !== 'production' ? 'ws' : 'wss';
+
+        window.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+        console.log('Attempting Connection...');
+
+        window.socket.onopen = () => {
+            console.log('Successfully Connected');
+            window.socket.send('Hi From the Client!');
+            setWebSocketOpen(true);
+        };
+
+        window.socket.onclose = event => {
+            console.log('Socket Closed Connection: ', event);
+            window.socket.send('Client Closed!');
+        };
+
+        window.socket.onmessage = message => {
+            console.log(message);
+        };
+
+        window.socket.onerror = error => {
+            console.log('Socket Error: ', error);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isWebSocketOpen) {
+            calculate();
+        }
+    }, [isWebSocketOpen]);
 
     return (
         <div>
