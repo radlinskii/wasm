@@ -3,6 +3,14 @@
 Population::Population(vector<Individual*> solutions){
     this->solutions = solutions;
 };
+
+
+Population::Population(vector<vector<double>> vectors) {
+    for(int i = 0; i < vectors.size(); i++) {
+        this->solutions.push_back(new Individual(vectors[i]));
+    }
+}
+
 Population::Population(){};
 Population::~Population(){};
 

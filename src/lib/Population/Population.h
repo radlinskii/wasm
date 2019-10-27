@@ -16,6 +16,7 @@ class Population {
         vector<Individual*> solutions;
     public:
         Population(vector<Individual*> solutions);
+        Population(vector<vector<double>> vectors);
         Population();
         ~Population();
 

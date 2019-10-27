@@ -7,6 +7,43 @@
 #include "FitnessFunctions/SphereFunction.cpp"
 #include "FitnessFunctions/BealeFunction.cpp"
 
+vector<vector<double>> zip(double* array, int len, int zipLen) {
+    vector<vector<double>> vector2d;
+    for(int i = 0, count = 0; i < len; i++) {
+        vector<double> v;
+        for (int j = 0; j < zipLen; j++) {
+            v.push_back(array[count]);
+            count++;
+        }
+        vector2d.push_back(v);
+    }
+
+    return vector2d;
+}
+
+char* calculate(double* elements, int len, int dimensions, FitnessFunction* f) {
+    int populationLen = len / dimensions;
+
+    vector<vector<double>> zippedVectors = zip(elements, populationLen, dimensions);
+
+    Population* pop = new Population(zippedVectors);
+    Parameters* params = new Parameters();
+
+    params->setMaxNumOfGenerations(100);
+    params->setFitnessFunction(f);
+    params->setAgentCount(populationLen);
+
+    DifferentialEvolution* de = new DifferentialEvolution(params);
+    de->setPopulation(pop);
+
+    Individual* solution = de->evaluate();
+
+    char* greeting = (char*) malloc(70);
+    sprintf(greeting, "Solution is: %s, with result: %.4f\n", solution->toString().c_str(), solution->getFitness());
+
+    return greeting;
+}
+
 using namespace std;
 extern "C" {
     int main() {
@@ -22,20 +59,21 @@ extern "C" {
         return greeting;
     }
 
-    char* calculate(double* elements, int len) {
-        FitnessFunction* f = new BealeFunction();
-        Parameters* params = new Parameters();
+    char* calcSphere(double* elements, int len, int dimensions, double minValue, double maxValue) {
+        FitnessFunction* f = new SphereFunction(dimensions, make_tuple(minValue, maxValue));
 
-        params->setMaxNumOfGenerations(100);
-        params->setFitnessFunction(f);
+        return calculate(elements, len, dimensions, f);
+    }
 
-        DifferentialEvolution* de = new DifferentialEvolution(params);
+    char* calcMichalewicz(double* elements, int len, int dimensions, double minValue, double maxValue) {
+        FitnessFunction* f = new MichalewiczFunction(dimensions, make_tuple(minValue, maxValue));
 
-        Individual* solution = de->evaluate();
+        return calculate(elements, len, dimensions, f);
+    }
 
-        char* greeting = (char*) malloc(70);
-        sprintf(greeting, "Solution is: %s, with result: %.4f\n", solution->toString().c_str(), solution->getFitness());
+    char* calcBeale(double* elements, int len, int dimensions, double minValue, double maxValue) {
+        FitnessFunction* f = new BealeFunction(dimensions, make_tuple(minValue, maxValue));
 
-        return greeting;
+        return calculate(elements, len, dimensions, f);
     }
 }

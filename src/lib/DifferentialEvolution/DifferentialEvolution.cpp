@@ -112,7 +112,6 @@ void DifferentialEvolution::select(Individual* current, Individual* trial) {
 
 Individual* DifferentialEvolution::evaluate(){
     Individual* best = nullptr;
-    this->populate();
 
     int generationCounter = 0;
     while(generationCounter <= this->parameters->getMaxNumOfGenerations()) {
