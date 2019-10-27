@@ -1,46 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './Input.scss';
 
 const Input = () => {
-    useEffect(() => {
-        /* eslint-disable no-console */
-        const protocol = process.env.NODE_ENV !== 'production' ? 'ws' : 'wss';
+    const [inputValue, setInputValue] = useState('');
 
-        window.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
-        console.log('Attempting Connection...');
+    const handleValueChange = e => {
+        setInputValue(e.target.value);
+    };
 
-        const input = document.getElementById('input');
-        const handleButtonClick = () => {
-            window.socket.send(input.value);
-        };
-        const button = document.getElementById('button');
-        button.onclick = handleButtonClick;
-
-        window.socket.onopen = () => {
-            console.log('Successfully Connected');
-            window.socket.send('Hi From the Client!');
-        };
-
-        window.socket.onclose = event => {
-            console.log('Socket Closed Connection: ', event);
-            window.socket.send('Client Closed!');
-        };
-
-        window.socket.onmessage = message => {
-            console.log(message);
-        };
-
-        window.socket.onerror = error => {
-            console.log('Socket Error: ', error);
-        };
-        /* eslint-enable no-console */
-    }, []);
+    const handleButtonClick = () => {
+        window.socket.send(inputValue);
+        setInputValue('');
+    };
 
     return (
         <div className={styles.root}>
             <label htmlFor="input">Type your message here: </label>
-            <input id="input" name="input" type="text" />
-            <button id="button">Send</button>
+            <input id="input" name="input" onChange={handleValueChange} type="text" />
+            <button id="button" onClick={handleButtonClick}>
+                Send
+            </button>
         </div>
     );
 };
