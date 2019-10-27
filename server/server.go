@@ -1,12 +1,22 @@
 package server
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/gorilla/websocket"
 )
+
+// connectionResponse is the initial json response send by WebSocket when client gets connected.
+type connectionResponse struct {
+	Population population `json:"population"`
+	Func       string     `json:"function"`
+	Dimensions int        `json:"dimensions"`
+	MinValue   float64    `json:"minValue"`
+	MaxValue   float64    `json:"maxValue"`
+}
 
 // Server type combines std output and std error loggers
 type Server struct {
@@ -36,10 +46,20 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	// helpful log statement to show connections
 	s.Info.Println("Client Connected")
-	err = ws.WriteMessage(1, []byte("Hi Client!"))
+
+	population := populate(populationLength, fitnessFunc)
+	resp := connectionResponse{population, fitnessFunc.ID.String(), fitnessFunc.Dimensions, fitnessFunc.MinValue, fitnessFunc.MaxValue}
+
+	data, err := json.Marshal(resp)
 	if err != nil {
 		s.Err.Println(err)
 	}
+
+	err = ws.WriteMessage(1, data)
+	if err != nil {
+		s.Err.Println(err)
+	}
+
 	// listen indefinitely for new messages coming
 	// through on our WebSocket connection
 	s.listenOnWebSocket(ws)

@@ -49,7 +49,6 @@ const App = () => {
 
         window.socket.onopen = () => {
             console.log('Successfully Connected');
-            window.socket.send('Hi From the Client!');
             setWebSocketOpen(true);
         };
 
@@ -59,7 +58,7 @@ const App = () => {
         };
 
         window.socket.onmessage = message => {
-            console.log(message);
+            console.log(message.data);
         };
 
         window.socket.onerror = error => {
