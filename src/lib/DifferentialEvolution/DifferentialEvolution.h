@@ -28,7 +28,7 @@ class DifferentialEvolution {
         Parameters* getParameters();
         void setParameters(Parameters* parameters);
 
-        Individual* evaluate();
+        Population* evaluate();
 };
 
 #endif

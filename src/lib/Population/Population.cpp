@@ -21,6 +21,16 @@ void Population::setSolutions(vector<Individual*> solutions){
     this->solutions = solutions;
 };
 
+
+vector<vector<double>> Population::toVectors() {
+    vector<vector<double>> vector2d;
+    for (int i = 0; i < this->getSolutions().size(); i++) {
+        vector2d.push_back(this->getSolutions()[i]->getElements());
+    }
+
+    return vector2d;
+}
+
 double Population::getAverageFitness(){
     double sum = 0.0;
 

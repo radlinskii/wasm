@@ -110,9 +110,7 @@ void DifferentialEvolution::select(Individual* current, Individual* trial) {
     }
 }
 
-Individual* DifferentialEvolution::evaluate(){
-    Individual* best = nullptr;
-
+Population* DifferentialEvolution::evaluate(){
     int generationCounter = 0;
     while(generationCounter <= this->parameters->getMaxNumOfGenerations()) {
         for (int i = 0; i < this->parameters->getAgentCount(); i++) {
@@ -121,15 +119,10 @@ Individual* DifferentialEvolution::evaluate(){
             Individual* donor = this->mutate(i);
             Individual* trial = this->recombinate(current, donor);
             this->select(current, trial);
-
-            best = this->population->getBest();
-
-            // if Stopping criterion has been met
-            // return best individual
         }
 
         generationCounter++;
     }
 
-    return best;
+    return this->getPopulation();
 };

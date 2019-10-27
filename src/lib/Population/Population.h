@@ -23,6 +23,8 @@ class Population {
         vector<Individual*> getSolutions();
         void setSolutions(vector<Individual*> solutions);
 
+        vector<vector<double>> toVectors();
+
         double getAverageFitness();
         double getMaximumFitness();
         double getMinimumFitness();
