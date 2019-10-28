@@ -4,6 +4,9 @@
         "jest/globals": true,
         "es6": true
     },
+    "globals": {
+        "wasmMemory": "readonly"
+    },
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 8,

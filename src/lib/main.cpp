@@ -54,7 +54,8 @@ double* calculate(double* elements, int len, int dimensions, FitnessFunction* f)
     vector<vector<double>> vector2d = solution->toVectors();
 
     vector<double> flat = flatten(vector2d, dimensions);
-    double result[len];
+    double* result;
+    result = new double[len];
     copy(flat.begin(), flat.end(), result);
 
     return result;

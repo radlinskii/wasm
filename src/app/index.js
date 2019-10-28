@@ -3,43 +3,48 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Input from './components/Input/Input';
 
+const zip = (list, len, zipLen) => {
+    const array2d = [];
+    for (let i = 0, count = 0; i < len; i++) {
+        const array = [];
+        for (let j = 0; j < zipLen; j++) {
+            array.push(list[count]);
+            count += 1;
+        }
+        array2d.push(array);
+    }
+
+    return array2d;
+};
+
 const greetFromCpp = window.cwrap('greet', 'string', ['string']);
 
 const calcSphere = ({ pointer, length, dimensions, minValue, maxValue }) => {
-    const func = window.Module.cwrap('calcSphere', 'string', ['number', 'number', 'number', 'number', 'number']);
+    const func = window.Module.cwrap('calcSphere', 'number', ['number', 'number', 'number', 'number', 'number']);
 
-    const result = func(pointer, length, dimensions, minValue, maxValue);
-
-    console.log(result);
+    return new Float64Array(wasmMemory.buffer, func(pointer, length, dimensions, minValue, maxValue), length);
 };
 
 const calcMichalewicz = ({ pointer, length, dimensions, minValue, maxValue }) => {
-    const func = window.Module.cwrap('calcMichalewicz', 'string', ['number', 'number', 'number', 'number', 'number']);
+    const func = window.Module.cwrap('calcMichalewicz', 'number', ['number', 'number', 'number', 'number', 'number']);
 
-    const result = func(pointer, length, dimensions, minValue, maxValue);
-
-    console.log(result);
+    return new Float64Array(wasmMemory.buffer, func(pointer, length, dimensions, minValue, maxValue), length);
 };
 
 const calcBeale = ({ pointer, length, dimensions, minValue, maxValue }) => {
-    const func = window.Module.cwrap('calcBeale', 'string', ['number', 'number', 'number', 'number', 'number']);
+    const func = window.Module.cwrap('calcBeale', 'number', ['number', 'number', 'number', 'number', 'number']);
 
-    const result = func(pointer, length, dimensions, minValue, maxValue);
-
-    console.log(result);
+    return new Float64Array(wasmMemory.buffer, func(pointer, length, dimensions, minValue, maxValue), length);
 };
 
 const evaluate = ({ fitnessFunctionType, ...rest }) => {
     switch (fitnessFunctionType) {
         case 'michalewicz':
-            calcMichalewicz({ ...rest });
-            break;
+            return calcMichalewicz({ ...rest });
         case 'beale':
-            calcBeale({ ...rest });
-            break;
+            return calcBeale({ ...rest });
         case 'sphere':
-            calcSphere({ ...rest });
-            break;
+            return calcSphere({ ...rest });
 
         default:
             throw new Error('Invalid fitness function type');
@@ -48,33 +53,27 @@ const evaluate = ({ fitnessFunctionType, ...rest }) => {
 
 const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensions, minValue, maxValue }) => {
     let pointer;
-    const flatPopulation = new Float64Array(population.length * dimensions);
-
-    for (let i = 0, count = 0; i < population.length; i++) {
-        for (let j = 0; j < dimensions; j++) {
-            flatPopulation[count] = population[i][j];
-            count += 1;
-        }
-    }
+    const flatPopulation = population.flat();
+    const typedFlatPopulation = Float64Array.from(flatPopulation);
 
     try {
-        // Allocate some space in the heap for the data (making sure to use the appropriate memory size of the elements)
-        pointer = window.Module._malloc(flatPopulation.length * flatPopulation.BYTES_PER_ELEMENT);
+        pointer = window.Module._malloc(typedFlatPopulation.length * typedFlatPopulation.BYTES_PER_ELEMENT);
 
-        // Assign the data to the heap - Keep in mind bytes per element
-        window.Module.HEAPF64.set(flatPopulation, pointer / flatPopulation.BYTES_PER_ELEMENT);
+        window.Module.HEAPF64.set(typedFlatPopulation, pointer / typedFlatPopulation.BYTES_PER_ELEMENT);
 
-        // eslint-disable-next-line no-console
-        evaluate({
-            length: flatPopulation.length,
+        const results = evaluate({
+            length: typedFlatPopulation.length,
             pointer,
             dimensions,
             minValue,
             maxValue,
             fitnessFunctionType,
         });
+
+        const zippedResults = zip(results, population.length, dimensions);
+
+        console.log(zippedResults);
     } catch (e) {
-        // eslint-disable-next-line no-console
         console.error(e);
     } finally {
         window.Module._free(pointer);
