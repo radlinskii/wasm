@@ -72,7 +72,7 @@ const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensi
 
         const zippedResults = zip(results, population.length, dimensions);
 
-        console.log(zippedResults);
+        window.socket.send(JSON.stringify(zippedResults));
     } catch (e) {
         console.error(e);
     } finally {

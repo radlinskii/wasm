@@ -67,16 +67,27 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) listenOnWebSocket(conn *websocket.Conn) {
 	for {
-		// read in a message
-		messageType, p, err := conn.ReadMessage()
+		messageType, msg, err := conn.ReadMessage()
 		if err != nil {
 			s.Err.Println(err)
 			return
 		}
-		// print out that message for clarity
-		s.Info.Println(string(p))
 
-		if err := conn.WriteMessage(messageType, []byte("did you just say \""+string(p)+"\"?")); err != nil {
+		var newGeneration population
+		err = json.Unmarshal(msg, &newGeneration)
+
+		genCount++
+		s.Info.Printf("geneneration number: %d\n", genCount)
+		s.Info.Println(newGeneration)
+
+		resp := connectionResponse{newGeneration, fitnessFunc.ID.String(), fitnessFunc.Dimensions, fitnessFunc.MinValue, fitnessFunc.MaxValue}
+
+		data, err := json.Marshal(resp)
+		if err != nil {
+			s.Err.Println(err)
+		}
+
+		if err := conn.WriteMessage(messageType, data); err != nil {
 			s.Err.Println(err)
 			return
 		}

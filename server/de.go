@@ -16,6 +16,7 @@ func init() {
 
 var fitnessFunc fitnessFunction
 var populationLength int
+var genCount = 0
 
 type fitnessFuncType int
 
