@@ -1,6 +1,6 @@
 #include "DifferentialEvolution.h"
 
-DifferentialEvolution::DifferentialEvolution(Parameters* parameters){
+DifferentialEvolution::DifferentialEvolution(shared_ptr<Parameters> parameters){
     this->parameters = parameters;
     default_random_engine re;
     this->randomEngine = re;
@@ -14,10 +14,10 @@ shared_ptr<Population> DifferentialEvolution::getPopulation(){
 void DifferentialEvolution::setPopulation(shared_ptr<Population> population){
     this->population = population;
 };
-Parameters* DifferentialEvolution::getParameters(){
+shared_ptr<Parameters> DifferentialEvolution::getParameters(){
     return this->parameters;
 };
-void DifferentialEvolution::setParameters(Parameters* parameters){
+void DifferentialEvolution::setParameters(shared_ptr<Parameters> parameters){
     this->parameters = parameters;
 };
 

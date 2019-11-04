@@ -11,7 +11,7 @@ using namespace std;
 class DifferentialEvolution {
     private:
         shared_ptr<Population> population;
-        Parameters* parameters;
+        shared_ptr<Parameters> parameters;
         default_random_engine  randomEngine;
 
         double getRandom(double, double);
@@ -20,13 +20,13 @@ class DifferentialEvolution {
         shared_ptr<Individual> recombinate(shared_ptr<Individual>, shared_ptr<Individual>);
         void select(shared_ptr<Individual>, shared_ptr<Individual>);
     public:
-        DifferentialEvolution(Parameters* parameters);
+        DifferentialEvolution(shared_ptr<Parameters> parameters);
         ~DifferentialEvolution();
 
         shared_ptr<Population> getPopulation();
         void setPopulation(shared_ptr<Population> population);
-        Parameters* getParameters();
-        void setParameters(Parameters* parameters);
+        shared_ptr<Parameters> getParameters();
+        void setParameters(shared_ptr<Parameters> parameters);
 
         shared_ptr<Population> evaluate();
 };

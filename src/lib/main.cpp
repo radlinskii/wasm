@@ -40,13 +40,13 @@ double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessF
     vector<vector<double>> zippedVectors = zip(elements, populationLen, dimensions);
 
     shared_ptr<Population> pop = make_shared<Population>(zippedVectors);
-    Parameters* params = new Parameters();
+    shared_ptr<Parameters> params = make_shared<Parameters>();
 
     params->setMaxNumOfGenerations(100);
     params->setFitnessFunction(f);
     params->setAgentCount(populationLen);
 
-    DifferentialEvolution* de = new DifferentialEvolution(params);
+    unique_ptr<DifferentialEvolution> de = make_unique<DifferentialEvolution>(params);
     de->setPopulation(pop);
 
     shared_ptr<Population> solution = de->evaluate();
