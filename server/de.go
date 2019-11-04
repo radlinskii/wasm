@@ -12,11 +12,13 @@ func init() {
 
 	fitnessFunc = michalewiczFunc
 	populationLength = 100
+	maxNumOfGenerations = 20
 }
 
 var fitnessFunc fitnessFunction
 var populationLength int
 var genCount = 0
+var maxNumOfGenerations = 100
 
 type fitnessFuncType int
 

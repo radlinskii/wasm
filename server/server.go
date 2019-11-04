@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -69,12 +70,27 @@ func (s *Server) listenOnWebSocket(conn *websocket.Conn) {
 	for {
 		messageType, msg, err := conn.ReadMessage()
 		if err != nil {
+			conn.Close()
 			s.Err.Println(err)
 			return
 		}
 
 		var newGeneration population
 		err = json.Unmarshal(msg, &newGeneration)
+
+		if genCount >= maxNumOfGenerations {
+			finishMsg := fmt.Sprintf("achieved max number of generations - %d", genCount)
+
+			if err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, finishMsg)); err != nil {
+				conn.Close()
+				s.Err.Println(err)
+				return
+			}
+
+			s.Info.Println(finishMsg)
+			conn.Close()
+			return
+		}
 
 		genCount++
 		s.Info.Printf("geneneration number: %d\n", genCount)
@@ -84,10 +100,12 @@ func (s *Server) listenOnWebSocket(conn *websocket.Conn) {
 
 		data, err := json.Marshal(resp)
 		if err != nil {
+			conn.Close()
 			s.Err.Println(err)
 		}
 
 		if err := conn.WriteMessage(messageType, data); err != nil {
+			conn.Close()
 			s.Err.Println(err)
 			return
 		}

@@ -94,8 +94,7 @@ const App = () => {
         };
 
         window.socket.onclose = event => {
-            console.log('Socket Closed Connection: ', event);
-            window.socket.send('Client Closed!');
+            console.log(`Connection closed with code: ${event.code}, reason: ${event.reason}`);
         };
 
         window.socket.onmessage = message => {
