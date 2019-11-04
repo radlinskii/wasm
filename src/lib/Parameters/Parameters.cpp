@@ -9,7 +9,7 @@ void Parameters::ensureFBoundaries(double f) {
     }
 }
 
-Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, FitnessFunction* fitnessFunction) {
+Parameters::Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, shared_ptr<FitnessFunction> fitnessFunction) {
     this->cr = cr;
     this->agentCount = agentCount;
     this->maxNumOfGenerations = maxNumOfGenerations;
@@ -66,10 +66,10 @@ void Parameters::setDomain(tuple<double, double> domain){
     this->fitnessFunction->setDomain(domain);
 };
 
-FitnessFunction* Parameters::getFitnessFunction(){
+shared_ptr<FitnessFunction> Parameters::getFitnessFunction(){
     return this->fitnessFunction;
 };
-void Parameters::setFitnessFunction(FitnessFunction* fitnessFunction){
+void Parameters::setFitnessFunction(shared_ptr<FitnessFunction> fitnessFunction){
     this->fitnessFunction = fitnessFunction;
 };
 

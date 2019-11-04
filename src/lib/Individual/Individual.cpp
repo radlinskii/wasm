@@ -24,7 +24,7 @@ int Individual::getDimensions(){
     return this->dimensions;
 };
 
-double Individual::evaluate(FitnessFunction* f) {
+double Individual::evaluate(shared_ptr<FitnessFunction> f) {
     this->fitness = f->evaluate(this->elements);
 
     return this->fitness;

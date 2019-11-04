@@ -31,7 +31,7 @@ class Population {
         double getTotalSumFitness();
 
         Individual* getBest();
-        void evaluate(FitnessFunction* fitnessFunction);
+        void evaluate(shared_ptr<FitnessFunction> fitnessFunction);
 };
 
 #endif

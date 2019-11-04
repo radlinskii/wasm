@@ -34,7 +34,7 @@ vector<double> flatten(vector<vector<double>> v, int flattenLen) {
     return flat;
 }
 
-double* calculate(double* elements, int len, int dimensions, FitnessFunction* f) {
+double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessFunction> f) {
     int populationLen = len / dimensions;
 
     vector<vector<double>> zippedVectors = zip(elements, populationLen, dimensions);
@@ -75,19 +75,19 @@ extern "C" {
     }
 
     double* calcSphere(double* elements, int len, int dimensions, double minValue, double maxValue) {
-        FitnessFunction* f = new SphereFunction(dimensions, make_tuple(minValue, maxValue));
+        shared_ptr<FitnessFunction> f = make_shared<SphereFunction>(dimensions, make_tuple(minValue, maxValue));
 
         return calculate(elements, len, dimensions, f);
     }
 
     double* calcMichalewicz(double* elements, int len, int dimensions, double minValue, double maxValue) {
-        FitnessFunction* f = new MichalewiczFunction(dimensions, make_tuple(minValue, maxValue));
+        shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(minValue, maxValue));
 
         return calculate(elements, len, dimensions, f);
     }
 
     double* calcBeale(double* elements, int len, int dimensions, double minValue, double maxValue) {
-        FitnessFunction* f = new BealeFunction(dimensions, make_tuple(minValue, maxValue));
+        shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(minValue, maxValue));
 
         return calculate(elements, len, dimensions, f);
     }
