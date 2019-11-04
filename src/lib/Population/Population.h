@@ -13,23 +13,25 @@ using namespace std;
 
 class Population {
     private:
-        vector<Individual*> solutions;
+        vector<shared_ptr<Individual>> solutions;
     public:
-        Population(vector<Individual*> solutions);
+        Population(vector<shared_ptr<Individual>> solutions);
         Population(vector<vector<double>> vectors);
         Population();
         ~Population();
 
-        vector<Individual*> getSolutions();
-        void setSolutions(vector<Individual*> solutions);
+        vector<shared_ptr<Individual>> getSolutions();
+        void setSolutions(vector<shared_ptr<Individual>> solutions);
+
+        vector<vector<double>> toVectors();
 
         double getAverageFitness();
         double getMaximumFitness();
         double getMinimumFitness();
         double getTotalSumFitness();
 
-        Individual* getBest();
-        void evaluate(FitnessFunction* fitnessFunction);
+        shared_ptr<Individual> getBest();
+        void evaluate(shared_ptr<FitnessFunction> fitnessFunction);
 };
 
 #endif

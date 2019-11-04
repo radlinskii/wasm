@@ -14,9 +14,9 @@ class Parameters {
         double cr;
         int maxNumOfGenerations;
         int agentCount;
-        FitnessFunction* fitnessFunction;
+        shared_ptr<FitnessFunction> fitnessFunction;
     public:
-        Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, FitnessFunction* fitnessFunction);
+        Parameters(double f, double cr, int agentCount, int maxNumOfGenerations, shared_ptr<FitnessFunction> fitnessFunction);
         Parameters();
         ~Parameters();
 
@@ -34,8 +34,8 @@ class Parameters {
         void setDimensions(int dimensions);
         tuple<double, double> getDomain();
         void setDomain(tuple<double, double> domain);
-        FitnessFunction* getFitnessFunction();
-        void setFitnessFunction(FitnessFunction* fitnessFunction);
+        shared_ptr<FitnessFunction> getFitnessFunction();
+        void setFitnessFunction(shared_ptr<FitnessFunction> fitnessFunction);
         double getLowerDomainBound ();
         double getHigherDomainBound ();
 };

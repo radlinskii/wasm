@@ -1,30 +1,40 @@
 #include "Population.h"
 
-Population::Population(vector<Individual*> solutions){
+Population::Population(vector<shared_ptr<Individual>> solutions){
     this->solutions = solutions;
 };
 
 
 Population::Population(vector<vector<double>> vectors) {
     for(int i = 0; i < vectors.size(); i++) {
-        this->solutions.push_back(new Individual(vectors[i]));
+        this->solutions.push_back(make_shared<Individual>(vectors[i]));
     }
 }
 
 Population::Population(){};
 Population::~Population(){};
 
-vector<Individual*> Population::getSolutions(){
+vector<shared_ptr<Individual>> Population::getSolutions(){
     return this->solutions;
 };
-void Population::setSolutions(vector<Individual*> solutions){
+void Population::setSolutions(vector<shared_ptr<Individual>> solutions){
     this->solutions = solutions;
 };
+
+
+vector<vector<double>> Population::toVectors() {
+    vector<vector<double>> vector2d;
+    for (int i = 0; i < this->getSolutions().size(); i++) {
+        vector2d.push_back(this->getSolutions()[i]->getElements());
+    }
+
+    return vector2d;
+}
 
 double Population::getAverageFitness(){
     double sum = 0.0;
 
-    for (Individual* i : solutions) {
+    for (shared_ptr<Individual> i : solutions) {
         sum += i->getFitness();
     }
 
@@ -35,7 +45,7 @@ double Population::getAverageFitness(){
 double Population::getMaximumFitness(){
     double max = -DBL_MAX;
 
-    for (Individual* i : solutions) {
+    for (shared_ptr<Individual> i : solutions) {
         if (i->getFitness() >= max) {
             max = i->getFitness();
         }
@@ -46,7 +56,7 @@ double Population::getMaximumFitness(){
 double Population::getMinimumFitness(){
     double min = DBL_MAX;
 
-    for (Individual* i : solutions) {
+    for (shared_ptr<Individual> i : solutions) {
         if (i->getFitness() <= min) {
             min = i->getFitness();
         }
@@ -57,31 +67,31 @@ double Population::getMinimumFitness(){
 double Population::getTotalSumFitness(){
     double sum = 0.0;
 
-    for (Individual* i : solutions) {
+    for (shared_ptr<Individual> i : solutions) {
         sum += i->getFitness();
     }
 
     return sum;
 };
 
-bool comparator (Individual* i, Individual* j) {
+bool comparator (shared_ptr<Individual> i, shared_ptr<Individual> j) {
     return (i->getFitness()<j->getFitness());
 }
 
-Individual* Population::getBest(){
+shared_ptr<Individual> Population::getBest(){
     if (this->solutions.size() == 0) {
         return nullptr;
     }
 
-    vector<Individual*> individuals = this->solutions;
+    vector<shared_ptr<Individual>> individuals = this->solutions;
 
     sort(individuals.begin(), individuals.end(), comparator);
 
     return individuals[0];
 };
 
-void Population::evaluate(FitnessFunction* fitnessFunction){
-    for (Individual* i : solutions) {
+void Population::evaluate(shared_ptr<FitnessFunction> fitnessFunction){
+    for (shared_ptr<Individual> i : solutions) {
         i->evaluate(fitnessFunction);
     }
 };

@@ -15,6 +15,7 @@ emcc \
 \
 -s FORCE_FILESYSTEM=1 \
 -s WASM=1 -O2 \
+-s ASSERTIONS=1 \
 -s EXPORTED_FUNCTIONS="['_main', '_greet', '_calcSphere', '_calcMichalewicz', '_calcBeale']" \
 -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
 \

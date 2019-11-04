@@ -25,7 +25,7 @@ public:
 
     int getDimensions();
 
-    double evaluate(FitnessFunction*);
+    double evaluate(shared_ptr<FitnessFunction>);
 
     string toString();
 };

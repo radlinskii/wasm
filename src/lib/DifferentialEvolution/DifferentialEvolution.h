@@ -10,25 +10,25 @@ using namespace std;
 
 class DifferentialEvolution {
     private:
-        Population* population;
-        Parameters* parameters;
+        shared_ptr<Population> population;
+        shared_ptr<Parameters> parameters;
         default_random_engine  randomEngine;
 
         double getRandom(double, double);
         void populate();
-        Individual* mutate(int);
-        Individual* recombinate(Individual*, Individual*);
-        void select(Individual*, Individual*);
+        shared_ptr<Individual> mutate(int);
+        shared_ptr<Individual> recombinate(shared_ptr<Individual>, shared_ptr<Individual>);
+        void select(shared_ptr<Individual>, shared_ptr<Individual>);
     public:
-        DifferentialEvolution(Parameters* parameters);
+        DifferentialEvolution(shared_ptr<Parameters> parameters);
         ~DifferentialEvolution();
 
-        Population* getPopulation();
-        void setPopulation(Population* population);
-        Parameters* getParameters();
-        void setParameters(Parameters* parameters);
+        shared_ptr<Population> getPopulation();
+        void setPopulation(shared_ptr<Population> population);
+        shared_ptr<Parameters> getParameters();
+        void setParameters(shared_ptr<Parameters> parameters);
 
-        Individual* evaluate();
+        shared_ptr<Population> evaluate();
 };
 
 #endif
