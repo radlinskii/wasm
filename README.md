@@ -29,3 +29,9 @@ Web Assembly in actual project!
 After making changes to `src/lib` files run the `buildwasm.sh` script or use `emcc` tool to compile them to `.wasm` files.
 
 > Be sure to import generated scripts to the `.html` files.
+
+### Questions
+
+- which parameters should be set by the client - CR & F or Function's Dimensions, Domain?
+- should CR & F parameters differ between clients?
+- randomly pick generation from the map?
