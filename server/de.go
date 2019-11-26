@@ -17,7 +17,6 @@ func init() {
 
 var fitnessFunc fitnessFunction
 var populationLength int
-var genCount = 0
 var maxNumOfGenerations = 100
 
 type fitnessFuncType int
@@ -45,6 +44,10 @@ type individual []float64
 
 // population is a vector of Individuals
 type population []individual
+
+func getRandInt(min, max int) int {
+	return min + rand.Int()%(max-min)
+}
 
 func getRandF64(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)

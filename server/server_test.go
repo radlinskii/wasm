@@ -34,7 +34,7 @@ func TestWsEndpoint(t *testing.T) {
 		t.Fatalf("could not send message over ws connection %v", err)
 	}
 
-	var testResp connectionResponse
+	var testResp agentResponse
 	err = json.Unmarshal(got, &testResp)
 	if err != nil {
 		t.Fatalf("could not unmarshal server response")

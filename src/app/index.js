@@ -51,7 +51,7 @@ const evaluate = ({ fitnessFunctionType, ...rest }) => {
     }
 };
 
-const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensions, minValue, maxValue }) => {
+const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensions, minValue, maxValue, agentId }) => {
     let pointer;
     const flatPopulation = population.flat();
     const typedFlatPopulation = Float64Array.from(flatPopulation);
@@ -71,8 +71,8 @@ const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensi
         });
 
         const zippedResults = zip(results, population.length, dimensions);
-
-        window.socket.send(JSON.stringify(zippedResults));
+        const response = { agentId, population: zippedResults };
+        window.socket.send(JSON.stringify(response));
     } catch (e) {
         console.error(e);
     } finally {

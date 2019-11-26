@@ -112,6 +112,7 @@ void DifferentialEvolution::select(shared_ptr<Individual> current, shared_ptr<In
 
 shared_ptr<Population> DifferentialEvolution::evaluate(){
     int generationCounter = 0;
+
     while(generationCounter <= this->parameters->getMaxNumOfGenerations()) {
         for (int i = 0; i < this->parameters->getAgentCount(); i++) {
             shared_ptr<Individual> current = this->population->getSolutions()[i];
