@@ -30,8 +30,6 @@ After making changes to `src/lib` files run the `buildwasm.sh` script or use `em
 
 > Be sure to import generated scripts to the `.html` files.
 
-### Questions
+### TODO
 
-- which parameters should be set by the client - CR & F or Function's Dimensions, Domain?
-- should CR & F parameters differ between clients?
-- randomly pick generation from the map?
+- appropriate fitness function
