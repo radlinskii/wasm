@@ -27,10 +27,12 @@ type agentResponse struct {
 	MinValue   float64    `json:"minValue"`
 	MaxValue   float64    `json:"maxValue"`
 	AgentID    int        `json:"agentId"`
+	CR         float64    `json:"paramCR"`
+	F          float64    `json:"paramF"`
 }
 
 func (a agentResponse) String() string {
-	return fmt.Sprintf("population: %v, function: %q, dimensions: %v, minValue: %f, maxValue: %f, agentId: %d", a.Population, a.Func, a.Dimensions, a.MinValue, a.MaxValue, a.AgentID)
+	return fmt.Sprintf("population: %v, function: %q, dimensions: %v, minValue: %f, maxValue: %f, agentId: %d, CR: %f, F: %f", a.Population, a.Func, a.Dimensions, a.MinValue, a.MaxValue, a.AgentID, a.CR, a.F)
 }
 
 type agent struct {
@@ -83,8 +85,10 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		Dimensions: fitnessFunc.Dimensions,
 		MinValue:   fitnessFunc.MinValue,
 		MaxValue:   fitnessFunc.MaxValue,
-		AgentID:    agentCount}
-
+		AgentID:    agentCount,
+		CR:         getCR(),
+		F:          getF(),
+	}
 	agentsMap[agentCount] = agent{ID: agentCount, AgentResponse: resp, GenerationNumber: 1}
 	currentAgentCount := agentCount
 

@@ -60,7 +60,6 @@ void ensureBoundaries(shared_ptr<Individual> donor, double lowerBoundary, double
 shared_ptr<Individual> DifferentialEvolution::mutate(int index) {
     vector<shared_ptr<Individual>> candidates;
     vector<shared_ptr<Individual>> individuals = this->population->getSolutions();
-    shared_ptr<Individual> current = individuals[index];
 
     individuals.erase(individuals.begin() + index);
 

@@ -34,7 +34,7 @@ vector<double> flatten(vector<vector<double>> v, int flattenLen) {
     return flat;
 }
 
-double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessFunction> f) {
+double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessFunction> f, double paramCR, double paramF) {
     int populationLen = len / dimensions;
 
     vector<vector<double>> zippedVectors = zip(elements, populationLen, dimensions);
@@ -45,6 +45,8 @@ double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessF
     params->setMaxNumOfGenerations(100);
     params->setFitnessFunction(f);
     params->setAgentCount(populationLen);
+    params->setCR(paramCR);
+    params->setF(paramF);
 
     unique_ptr<DifferentialEvolution> de = make_unique<DifferentialEvolution>(params);
     de->setPopulation(pop);
@@ -74,21 +76,21 @@ extern "C" {
         return greeting;
     }
 
-    double* calcSphere(double* elements, int len, int dimensions, double minValue, double maxValue) {
+    double* calcSphere(double* elements, int len, int dimensions, double minValue, double maxValue, double paramCR, double paramF) {
         shared_ptr<FitnessFunction> f = make_shared<SphereFunction>(dimensions, make_tuple(minValue, maxValue));
 
-        return calculate(elements, len, dimensions, f);
+        return calculate(elements, len, dimensions, f, paramCR, paramF);
     }
 
-    double* calcMichalewicz(double* elements, int len, int dimensions, double minValue, double maxValue) {
+    double* calcMichalewicz(double* elements, int len, int dimensions, double minValue, double maxValue, double paramCR, double paramF) {
         shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(minValue, maxValue));
 
-        return calculate(elements, len, dimensions, f);
+        return calculate(elements, len, dimensions, f, paramCR, paramF);
     }
 
-    double* calcBeale(double* elements, int len, int dimensions, double minValue, double maxValue) {
+    double* calcBeale(double* elements, int len, int dimensions, double minValue, double maxValue, double paramCR, double paramF) {
         shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(minValue, maxValue));
 
-        return calculate(elements, len, dimensions, f);
+        return calculate(elements, len, dimensions, f, paramCR, paramF);
     }
 }

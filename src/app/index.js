@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Input from './components/Input/Input';
 
 const zip = (list, len, zipLen) => {
     const array2d = [];
@@ -19,22 +18,34 @@ const zip = (list, len, zipLen) => {
 
 const greetFromCpp = window.cwrap('greet', 'string', ['string']);
 
-const calcSphere = ({ pointer, length, dimensions, minValue, maxValue }) => {
+const calcSphere = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF }) => {
     const func = window.Module.cwrap('calcSphere', 'number', ['number', 'number', 'number', 'number', 'number']);
 
-    return new Float64Array(wasmMemory.buffer, func(pointer, length, dimensions, minValue, maxValue), length);
+    return new Float64Array(
+        wasmMemory.buffer,
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF),
+        length
+    );
 };
 
-const calcMichalewicz = ({ pointer, length, dimensions, minValue, maxValue }) => {
+const calcMichalewicz = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF }) => {
     const func = window.Module.cwrap('calcMichalewicz', 'number', ['number', 'number', 'number', 'number', 'number']);
 
-    return new Float64Array(wasmMemory.buffer, func(pointer, length, dimensions, minValue, maxValue), length);
+    return new Float64Array(
+        wasmMemory.buffer,
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF),
+        length
+    );
 };
 
-const calcBeale = ({ pointer, length, dimensions, minValue, maxValue }) => {
+const calcBeale = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF }) => {
     const func = window.Module.cwrap('calcBeale', 'number', ['number', 'number', 'number', 'number', 'number']);
 
-    return new Float64Array(wasmMemory.buffer, func(pointer, length, dimensions, minValue, maxValue), length);
+    return new Float64Array(
+        wasmMemory.buffer,
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF),
+        length
+    );
 };
 
 const evaluate = ({ fitnessFunctionType, ...rest }) => {
@@ -51,7 +62,16 @@ const evaluate = ({ fitnessFunctionType, ...rest }) => {
     }
 };
 
-const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensions, minValue, maxValue, agentId }) => {
+const evaluatePopulation = ({
+    population,
+    function: fitnessFunctionType,
+    dimensions,
+    minValue,
+    maxValue,
+    agentId,
+    paramCR,
+    paramF,
+}) => {
     let pointer;
     const flatPopulation = population.flat();
     const typedFlatPopulation = Float64Array.from(flatPopulation);
@@ -68,6 +88,8 @@ const evaluatePopulation = ({ population, function: fitnessFunctionType, dimensi
             minValue,
             maxValue,
             fitnessFunctionType,
+            paramCR,
+            paramF,
         });
 
         const zippedResults = zip(results, population.length, dimensions);
@@ -111,7 +133,6 @@ const App = () => {
     return (
         <div>
             <h1>WebAssembly Demo in React</h1>
-            <Input />
         </div>
     );
 };
