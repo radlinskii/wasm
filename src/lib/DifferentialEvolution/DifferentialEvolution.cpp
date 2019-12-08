@@ -30,7 +30,7 @@ double DifferentialEvolution::getRandom(double min, double max) {
 void DifferentialEvolution::populate(){
     vector<shared_ptr<Individual>> individuals;
 
-    for (int i = 0; i < this->parameters->getAgentCount(); i++) {
+    for (int i = 0; i < this->parameters->getPopulationLength(); i++) {
         vector<double> v;
         for (int j = 0; j < this->parameters->getDimensions(); j++) {
             v.push_back(this->getRandom(this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound()));
@@ -113,7 +113,7 @@ shared_ptr<Population> DifferentialEvolution::evaluate(){
     int generationCounter = 0;
 
     while(generationCounter <= this->parameters->getMaxNumOfGenerations()) {
-        for (int i = 0; i < this->parameters->getAgentCount(); i++) {
+        for (int i = 0; i < this->parameters->getPopulationLength(); i++) {
             shared_ptr<Individual> current = this->population->getSolutions()[i];
 
             shared_ptr<Individual> donor = this->mutate(i);

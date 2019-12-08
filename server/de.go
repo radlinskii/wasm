@@ -19,10 +19,12 @@ func init() {
 	fitnessFunc = michalewiczFunc
 	populationLength = 100
 	maxNumOfGenerations = 20
+	agentPopulationsCount = 2
 }
 
+var agentPopulationsCount = 10
 var fitnessFunc fitnessFunction
-var populationLength int
+var populationLength = 100
 var maxNumOfGenerations = 100
 
 func getCR() float64 {

@@ -18,32 +18,32 @@ const zip = (list, len, zipLen) => {
 
 const greetFromCpp = window.cwrap('greet', 'string', ['string']);
 
-const calcSphere = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF }) => {
+const calcSphere = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
     const func = window.Module.cwrap('calcSphere', 'number', ['number', 'number', 'number', 'number', 'number']);
 
     return new Float64Array(
         wasmMemory.buffer,
-        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF),
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
         length
     );
 };
 
-const calcMichalewicz = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF }) => {
+const calcMichalewicz = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
     const func = window.Module.cwrap('calcMichalewicz', 'number', ['number', 'number', 'number', 'number', 'number']);
 
     return new Float64Array(
         wasmMemory.buffer,
-        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF),
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
         length
     );
 };
 
-const calcBeale = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF }) => {
+const calcBeale = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
     const func = window.Module.cwrap('calcBeale', 'number', ['number', 'number', 'number', 'number', 'number']);
 
     return new Float64Array(
         wasmMemory.buffer,
-        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF),
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
         length
     );
 };
@@ -71,6 +71,7 @@ const evaluatePopulation = ({
     agentId,
     paramCR,
     paramF,
+    maxNumOfGenerations,
 }) => {
     let pointer;
     const flatPopulation = population.flat();
@@ -90,6 +91,7 @@ const evaluatePopulation = ({
             fitnessFunctionType,
             paramCR,
             paramF,
+            maxNumOfGenerations,
         });
 
         const zippedResults = zip(results, population.length, dimensions);

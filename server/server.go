@@ -21,14 +21,15 @@ func (a agentRequest) String() string {
 }
 
 type agentResponse struct {
-	Population population `json:"population"`
-	Func       string     `json:"function"`
-	Dimensions int        `json:"dimensions"`
-	MinValue   float64    `json:"minValue"`
-	MaxValue   float64    `json:"maxValue"`
-	AgentID    int        `json:"agentId"`
-	CR         float64    `json:"paramCR"`
-	F          float64    `json:"paramF"`
+	Population          population `json:"population"`
+	Func                string     `json:"function"`
+	Dimensions          int        `json:"dimensions"`
+	MinValue            float64    `json:"minValue"`
+	MaxValue            float64    `json:"maxValue"`
+	AgentID             int        `json:"agentId"`
+	CR                  float64    `json:"paramCR"`
+	F                   float64    `json:"paramF"`
+	MaxNumOfGenerations int        `json:"maxNumOfGenerations"`
 }
 
 func (a agentResponse) String() string {
@@ -80,14 +81,15 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	population := populate(populationLength, fitnessFunc)
 
 	resp := agentResponse{
-		Population: population,
-		Func:       fitnessFunc.ID.String(),
-		Dimensions: fitnessFunc.Dimensions,
-		MinValue:   fitnessFunc.MinValue,
-		MaxValue:   fitnessFunc.MaxValue,
-		AgentID:    agentCount,
-		CR:         getCR(),
-		F:          getF(),
+		Population:          population,
+		Func:                fitnessFunc.ID.String(),
+		Dimensions:          fitnessFunc.Dimensions,
+		MinValue:            fitnessFunc.MinValue,
+		MaxValue:            fitnessFunc.MaxValue,
+		AgentID:             agentCount,
+		CR:                  getCR(),
+		F:                   getF(),
+		MaxNumOfGenerations: agentPopulationsCount,
 	}
 	agentsMap[agentCount] = agent{ID: agentCount, AgentResponse: resp, GenerationNumber: 1}
 	currentAgentCount := agentCount
