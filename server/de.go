@@ -5,6 +5,12 @@ import (
 	"math/rand"
 )
 
+const (
+	sphere fitnessFuncType = iota
+	michalewicz
+	beale
+)
+
 func init() {
 	// var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 10, MinValue: 0, MaxValue: 10000000000}
 	var michalewiczFunc = fitnessFunction{ID: michalewicz, Dimensions: 2, MinValue: 0, MaxValue: math.Pi}
@@ -13,19 +19,23 @@ func init() {
 	fitnessFunc = michalewiczFunc
 	populationLength = 100
 	maxNumOfGenerations = 20
+	agentPopulationsCount = 2
 }
 
+var agentPopulationsCount = 10
 var fitnessFunc fitnessFunction
-var populationLength int
+var populationLength = 100
 var maxNumOfGenerations = 100
 
-type fitnessFuncType int
+func getCR() float64 {
+	return getRandF64(0.8, 0.95)
+}
 
-const (
-	sphere fitnessFuncType = iota
-	michalewicz
-	beale
-)
+func getF() float64 {
+	return getRandF64(0.4, 0.6)
+}
+
+type fitnessFuncType int
 
 func (f fitnessFuncType) String() string {
 	return []string{"sphere", "michalewicz", "beale"}[f]

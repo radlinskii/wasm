@@ -1,7 +1,6 @@
 {
     "env": {
         "browser": true,
-        "jest/globals": true,
         "es6": true
     },
     "globals": {
@@ -15,17 +14,10 @@
             "jsx": true
         }
     },
-    "plugins": [
-        "eslint-plugin-babel",
-        "react-hooks",
-        "react",
-        "prettier",
-        "jest"
-    ],
+    "plugins": ["eslint-plugin-babel", "react-hooks", "react", "prettier"],
     "extends": [
         "airbnb-base",
         "plugin:react/recommended",
-        "plugin:jest/recommended",
         "prettier",
         "prettier/react"
     ],
@@ -197,15 +189,7 @@
                 "requiredFirst": false
             }
         ],
-        "react-hooks/rules-of-hooks": "error",
-        "jest/consistent-test-it": [
-            "error",
-            {
-                "fn": "test"
-            }
-        ],
-        "jest/expect-expect": "error",
-        "jest/prefer-todo": "warn"
+        "react-hooks/rules-of-hooks": "error"
     },
     "settings": {
         "react": {

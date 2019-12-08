@@ -26,8 +26,8 @@ class Parameters {
         void setF(double f);
         double getCR();
         void setCR(double cr);
-        int getAgentCount();
-        void setAgentCount(int agentCount);
+        int getPopulationLength();
+        void setPopulationLength(int agentCount);
         int getMaxNumOfGenerations();
         void setMaxNumOfGenerations(int maxNumOfGenerations);
         int getDimensions();

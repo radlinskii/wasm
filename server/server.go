@@ -21,16 +21,19 @@ func (a agentRequest) String() string {
 }
 
 type agentResponse struct {
-	Population population `json:"population"`
-	Func       string     `json:"function"`
-	Dimensions int        `json:"dimensions"`
-	MinValue   float64    `json:"minValue"`
-	MaxValue   float64    `json:"maxValue"`
-	AgentID    int        `json:"agentId"`
+	Population          population `json:"population"`
+	Func                string     `json:"function"`
+	Dimensions          int        `json:"dimensions"`
+	MinValue            float64    `json:"minValue"`
+	MaxValue            float64    `json:"maxValue"`
+	AgentID             int        `json:"agentId"`
+	CR                  float64    `json:"paramCR"`
+	F                   float64    `json:"paramF"`
+	MaxNumOfGenerations int        `json:"maxNumOfGenerations"`
 }
 
 func (a agentResponse) String() string {
-	return fmt.Sprintf("population: %v, function: %q, dimensions: %v, minValue: %f, maxValue: %f, agentId: %d", a.Population, a.Func, a.Dimensions, a.MinValue, a.MaxValue, a.AgentID)
+	return fmt.Sprintf("population: %v, function: %q, dimensions: %v, minValue: %f, maxValue: %f, agentId: %d, CR: %f, F: %f", a.Population, a.Func, a.Dimensions, a.MinValue, a.MaxValue, a.AgentID, a.CR, a.F)
 }
 
 type agent struct {
@@ -78,13 +81,16 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	population := populate(populationLength, fitnessFunc)
 
 	resp := agentResponse{
-		Population: population,
-		Func:       fitnessFunc.ID.String(),
-		Dimensions: fitnessFunc.Dimensions,
-		MinValue:   fitnessFunc.MinValue,
-		MaxValue:   fitnessFunc.MaxValue,
-		AgentID:    agentCount}
-
+		Population:          population,
+		Func:                fitnessFunc.ID.String(),
+		Dimensions:          fitnessFunc.Dimensions,
+		MinValue:            fitnessFunc.MinValue,
+		MaxValue:            fitnessFunc.MaxValue,
+		AgentID:             agentCount,
+		CR:                  getCR(),
+		F:                   getF(),
+		MaxNumOfGenerations: agentPopulationsCount,
+	}
 	agentsMap[agentCount] = agent{ID: agentCount, AgentResponse: resp, GenerationNumber: 1}
 	currentAgentCount := agentCount
 

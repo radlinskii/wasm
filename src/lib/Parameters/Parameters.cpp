@@ -38,10 +38,10 @@ void Parameters::setCR(double cr){
     this->cr = cr;
 };
 
-int Parameters::getAgentCount(){
+int Parameters::getPopulationLength(){
     return this->agentCount;
 };
-void Parameters::setAgentCount(int agentCount){
+void Parameters::setPopulationLength(int agentCount){
     this->agentCount = agentCount;
 };
 

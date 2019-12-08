@@ -34,7 +34,7 @@ vector<double> flatten(vector<vector<double>> v, int flattenLen) {
     return flat;
 }
 
-double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessFunction> f) {
+double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessFunction> f, double CR, double F, int maxNumOfGenerations) {
     int populationLen = len / dimensions;
 
     vector<vector<double>> zippedVectors = zip(elements, populationLen, dimensions);
@@ -42,16 +42,21 @@ double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessF
     shared_ptr<Population> pop = make_shared<Population>(zippedVectors);
     shared_ptr<Parameters> params = make_shared<Parameters>();
 
-    params->setMaxNumOfGenerations(100);
     params->setFitnessFunction(f);
-    params->setAgentCount(populationLen);
+    params->setPopulationLength(populationLen);
+    params->setCR(CR);
+    params->setF(F);
+    params->setMaxNumOfGenerations(maxNumOfGenerations);
 
     unique_ptr<DifferentialEvolution> de = make_unique<DifferentialEvolution>(params);
     de->setPopulation(pop);
 
-    shared_ptr<Population> solution = de->evaluate();
+    shared_ptr<Population> evaluatedPopulation = de->evaluate();
+    shared_ptr<Individual> best = evaluatedPopulation->getBest();
 
-    vector<vector<double>> vector2d = solution->toVectors();
+    printf("Current best individual: %s\n", best->toString().c_str());
+
+    vector<vector<double>> vector2d = evaluatedPopulation->toVectors();
 
     vector<double> flat = flatten(vector2d, dimensions);
     double* result = new double[len];
@@ -74,21 +79,21 @@ extern "C" {
         return greeting;
     }
 
-    double* calcSphere(double* elements, int len, int dimensions, double minValue, double maxValue) {
-        shared_ptr<FitnessFunction> f = make_shared<SphereFunction>(dimensions, make_tuple(minValue, maxValue));
+    double* calcSphere(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<SphereFunction>(dimensions, make_tuple(min, max));
 
-        return calculate(elements, len, dimensions, f);
+        return calculate(elements, len, dimensions, f, CR, F, maxNumOfGenerations);
     }
 
-    double* calcMichalewicz(double* elements, int len, int dimensions, double minValue, double maxValue) {
-        shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(minValue, maxValue));
+    double* calcMichalewicz(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(min, max));
 
-        return calculate(elements, len, dimensions, f);
+        return calculate(elements, len, dimensions, f, CR, F, maxNumOfGenerations);
     }
 
-    double* calcBeale(double* elements, int len, int dimensions, double minValue, double maxValue) {
-        shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(minValue, maxValue));
+    double* calcBeale(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(min, max));
 
-        return calculate(elements, len, dimensions, f);
+        return calculate(elements, len, dimensions, f, CR, F, maxNumOfGenerations);
     }
 }
