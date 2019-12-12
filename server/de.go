@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 )
@@ -18,14 +19,52 @@ func init() {
 
 	fitnessFunc = michalewiczFunc
 	populationLength = 100
-	maxNumOfGenerations = 20
-	agentPopulationsCount = 2
+	maxNumOfGenerations = 100
+	agentPopulationsCount = 100
 }
 
 var agentPopulationsCount = 10
 var fitnessFunc fitnessFunction
 var populationLength = 100
 var maxNumOfGenerations = 100
+
+var agentsMap = make(map[int]agent)
+var agentCount = 0
+
+type agentRequest struct {
+	AgentID    int        `json:"agentId"`
+	Population population `json:"population"`
+}
+
+func (a agentRequest) String() string {
+	return fmt.Sprintf("agentId: %d, population: %v", a.AgentID, a.Population)
+}
+
+type agentResponse struct {
+	Population          population `json:"population"`
+	Func                string     `json:"function"`
+	Dimensions          int        `json:"dimensions"`
+	MinValue            float64    `json:"minValue"`
+	MaxValue            float64    `json:"maxValue"`
+	AgentID             int        `json:"agentId"`
+	CR                  float64    `json:"paramCR"`
+	F                   float64    `json:"paramF"`
+	MaxNumOfGenerations int        `json:"maxNumOfGenerations"`
+}
+
+func (a agentResponse) String() string {
+	return fmt.Sprintf("population: %v, function: %q, dimensions: %v, minValue: %f, maxValue: %f, agentId: %d, CR: %f, F: %f", a.Population, a.Func, a.Dimensions, a.MinValue, a.MaxValue, a.AgentID, a.CR, a.F)
+}
+
+type agent struct {
+	ID               int           `json:"id"`
+	AgentResponse    agentResponse `json:"data"`
+	GenerationNumber int           `json:"generationNumber"`
+}
+
+func (a agent) String() string {
+	return fmt.Sprintf("id: %v, agentResponse: %v, generationNumber: %d", a.ID, a.AgentResponse, a.GenerationNumber)
+}
 
 func getCR() float64 {
 	return getRandF64(0.8, 0.95)
@@ -63,6 +102,10 @@ func getRandF64(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)
 }
 
+func getRandomBool() bool {
+	return getRandInt(0, 2) == 1
+}
+
 func populate(length int, f fitnessFunction) population {
 	var population population
 
@@ -75,4 +118,35 @@ func populate(length int, f fitnessFunction) population {
 	}
 
 	return population
+}
+
+func mutatePopulationWithRandomAgent(optimizedPopulation population) {
+	randomAgentID := getRandomAgentID()
+	randomAgent := agentsMap[randomAgentID]
+	randomAgentPopulation := randomAgent.AgentResponse.Population
+
+	mutatePoopulations(randomAgentPopulation, optimizedPopulation)
+
+	randomAgent.AgentResponse.Population = randomAgentPopulation
+	agentsMap[randomAgentID] = randomAgent
+}
+
+func mutatePoopulations(randomAgentPopulation, optimizedPopulation population) {
+	for i := 0; i < populationLength; i++ {
+		if getRandomBool() {
+			randomAgentPopulation[i], optimizedPopulation[i] = optimizedPopulation[i], randomAgentPopulation[i]
+		}
+	}
+}
+
+func getRandomAgentID() int {
+	keys := make([]int, len(agentsMap))
+
+	i := 0
+	for k := range agentsMap {
+		keys[i] = k
+		i++
+	}
+
+	return keys[getRandInt(0, i)]
 }
