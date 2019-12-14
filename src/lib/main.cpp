@@ -6,6 +6,7 @@
 #include "FitnessFunctions/SphereFunction.cpp"
 #include "FitnessFunctions/EllipticFunction.cpp"
 #include "FitnessFunctions/RastriginFunction.cpp"
+#include "FitnessFunctions/RosenbrockFunction.cpp"
 
 using namespace std;
 
@@ -90,6 +91,12 @@ extern "C" {
 
     double* calcRastrigin(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<RastriginFunction>(dimensions, make_tuple(min, max));
+
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
+    }
+
+    double* calcRosenbrock(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<RosenbrockFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }

@@ -54,9 +54,6 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		MaxNumOfGenerations: agentPopulationsCount,
 	}
 	agentsMap[agentCount] = agent{ID: agentCount, AgentResponse: resp, GenerationNumber: 1}
-	currentAgentCount := agentCount
-
-	agentCount++
 
 	data, err := json.Marshal(resp)
 	if err != nil {
@@ -68,13 +65,14 @@ func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		s.Err.Println(err)
 	}
 
+	// currentAgentCount := agentCount
 	ws.SetCloseHandler(func(code int, reason string) error {
-		if _, ok := agentsMap[currentAgentCount]; ok {
-			delete(agentsMap, currentAgentCount)
-		}
+		// deleteAgentFromMapByID(currentAgentCount)
 
 		return errors.New("Client closed connection")
 	})
+
+	agentCount++
 
 	s.listenOnWebSocket(ws)
 }
@@ -128,9 +126,7 @@ func (s *Server) handleExceedingMaxNumOfGenerations(a agent, conn *websocket.Con
 	finishMsg := fmt.Sprintf("achieved max number of generations - %d", a.GenerationNumber)
 	fmt.Println(a.AgentResponse.Population[0])
 
-	if _, ok := agentsMap[a.ID]; ok {
-		delete(agentsMap, a.ID)
-	}
+	// deleteAgentFromMapByID(a.ID)
 
 	if err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, finishMsg)); err != nil {
 		conn.Close()
@@ -140,6 +136,12 @@ func (s *Server) handleExceedingMaxNumOfGenerations(a agent, conn *websocket.Con
 
 	s.Info.Println(finishMsg)
 	conn.Close()
+}
+
+func deleteAgentFromMapByID(id int) {
+	if _, ok := agentsMap[id]; ok {
+		delete(agentsMap, id)
+	}
 }
 
 // Listen runs the server on a given port
