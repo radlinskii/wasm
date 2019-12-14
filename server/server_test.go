@@ -11,7 +11,7 @@ import (
 )
 
 func TestWsEndpoint(t *testing.T) {
-	fitnessFunc = fitnessFunction{ID: beale, Dimensions: 5, MinValue: 1, MaxValue: 5}
+	fitnessFunc = fitnessFunction{ID: elliptic, Dimensions: 5, MinValue: 1, MaxValue: 5}
 
 	server := GetServer()
 	// Create test server from handler

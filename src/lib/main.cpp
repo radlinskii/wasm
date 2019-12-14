@@ -3,9 +3,7 @@
 #include "Parameters/Parameters.h"
 #include "DifferentialEvolution/DifferentialEvolution.h"
 #include "Individual/Individual.h"
-#include "FitnessFunctions/MichalewiczFunction.cpp"
 #include "FitnessFunctions/SphereFunction.cpp"
-#include "FitnessFunctions/BealeFunction.cpp"
 #include "FitnessFunctions/EllipticFunction.cpp"
 
 using namespace std;
@@ -82,18 +80,6 @@ extern "C" {
 
     double* calcSphere(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<SphereFunction>(dimensions, make_tuple(min, max));
-
-        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
-    }
-
-    double* calcMichalewicz(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
-        shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(min, max));
-
-        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
-    }
-
-    double* calcBeale(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
-        shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }

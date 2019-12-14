@@ -7,24 +7,20 @@ import (
 
 const (
 	sphere fitnessFuncType = iota
-	michalewicz
-	beale
 	elliptic
 )
 
 type fitnessFuncType int
 
 func (f fitnessFuncType) String() string {
-	return []string{"sphere", "michalewicz", "beale", "elliptic"}[f]
+	return []string{"sphere", "elliptic"}[f]
 }
 
 func init() {
-	// var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 10, MinValue: 0, MaxValue: 10000000000}
-	// var michalewiczFunc = fitnessFunction{ID: michalewicz, Dimensions: 2, MinValue: 0, MaxValue: math.Pi}
-	// var bealeFunc = fitnessFunction{ID: beale, Dimensions: 2, MinValue: -4.5, MaxValue: 4.5}
-	var EllipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
+	var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 50, MinValue: -100, MaxValue: 100}
+	// var EllipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
 
-	fitnessFunc = EllipticFunc
+	fitnessFunc = sphereFunc
 	populationLength = 50
 	maxNumOfGenerations = 100
 	agentPopulationsCount = 25

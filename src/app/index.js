@@ -28,26 +28,6 @@ const calcSphere = ({ pointer, length, dimensions, minValue, maxValue, paramCR, 
     );
 };
 
-const calcMichalewicz = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
-    const func = window.Module.cwrap('calcMichalewicz', 'number', ['number', 'number', 'number', 'number', 'number']);
-
-    return new Float64Array(
-        wasmMemory.buffer,
-        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
-        length
-    );
-};
-
-const calcBeale = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
-    const func = window.Module.cwrap('calcBeale', 'number', ['number', 'number', 'number', 'number', 'number']);
-
-    return new Float64Array(
-        wasmMemory.buffer,
-        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
-        length
-    );
-};
-
 const calcElliptic = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
     const func = window.Module.cwrap('calcElliptic', 'number', ['number', 'number', 'number', 'number', 'number']);
 
@@ -60,10 +40,6 @@ const calcElliptic = ({ pointer, length, dimensions, minValue, maxValue, paramCR
 
 const evaluate = ({ fitnessFunctionType, ...rest }) => {
     switch (fitnessFunctionType) {
-        case 'michalewicz':
-            return calcMichalewicz({ ...rest });
-        case 'beale':
-            return calcBeale({ ...rest });
         case 'sphere':
             return calcSphere({ ...rest });
         case 'elliptic':
