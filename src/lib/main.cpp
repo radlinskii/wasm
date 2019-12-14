@@ -7,6 +7,7 @@
 #include "FitnessFunctions/EllipticFunction.cpp"
 #include "FitnessFunctions/RastriginFunction.cpp"
 #include "FitnessFunctions/RosenbrockFunction.cpp"
+#include "FitnessFunctions/AckleyFunction.cpp"
 
 using namespace std;
 
@@ -97,6 +98,12 @@ extern "C" {
 
     double* calcRosenbrock(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<RosenbrockFunction>(dimensions, make_tuple(min, max));
+
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
+    }
+
+    double* calcAckley(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<AckleyFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
