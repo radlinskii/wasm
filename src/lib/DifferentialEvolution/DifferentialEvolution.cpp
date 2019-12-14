@@ -42,19 +42,19 @@ void DifferentialEvolution::populate(){
     this->population = make_shared<Population>(individuals);
 };
 
-void ensureBoundaries(shared_ptr<Individual> donor, double lowerBoundary, double highBoundary) {
+void ensureBoundaries(shared_ptr<Individual> individual, double lowerBoundary, double highBoundary) {
     vector<double> correctElements;
-    for (int i = 0; i < donor->getDimensions(); i++){
-        if (donor->getElements()[i] < lowerBoundary) {
+    for (int i = 0; i < individual->getDimensions(); i++){
+        if (individual->getElements()[i] < lowerBoundary) {
             correctElements.push_back(lowerBoundary);
-        } else if (donor->getElements()[i] > highBoundary) {
+        } else if (individual->getElements()[i] > highBoundary) {
             correctElements.push_back(highBoundary);
         } else {
-            correctElements.push_back(donor->getElements()[i]);
+            correctElements.push_back(individual->getElements()[i]);
         }
     }
 
-    donor->setElements(correctElements);
+    individual->setElements(correctElements);
 }
 
 shared_ptr<Individual> DifferentialEvolution::mutate(int index) {
@@ -80,18 +80,18 @@ shared_ptr<Individual> DifferentialEvolution::mutate(int index) {
         mutatedElements.push_back(c1->getElements()[i] + (this->getParameters()->getF() * diff[i]));
     }
 
-    shared_ptr<Individual> donor = make_shared<Individual>(mutatedElements);
+    shared_ptr<Individual> mutant = make_shared<Individual>(mutatedElements);
 
-    ensureBoundaries(donor, this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound());
+    ensureBoundaries(mutant, this->parameters->getLowerDomainBound(), this->parameters->getHigherDomainBound());
 
-    return donor;
+    return mutant;
 }
 
-shared_ptr<Individual> DifferentialEvolution::recombinate(shared_ptr<Individual> current, shared_ptr<Individual> donor) {
+shared_ptr<Individual> DifferentialEvolution::recombinate(shared_ptr<Individual> current, shared_ptr<Individual> mutant) {
     vector<double> recombinatedElements;
     for (int i = 0; i < this->parameters->getDimensions(); i++) {
         if (getRandom(0.0, 1.0) <= this->parameters->getCR()) {
-            recombinatedElements.push_back(donor->getElements()[i]);
+            recombinatedElements.push_back(mutant->getElements()[i]);
         } else {
             recombinatedElements.push_back(current->getElements()[i]);
         }
@@ -100,12 +100,12 @@ shared_ptr<Individual> DifferentialEvolution::recombinate(shared_ptr<Individual>
     return make_shared<Individual>(recombinatedElements);
 }
 
-void DifferentialEvolution::select(shared_ptr<Individual> current, shared_ptr<Individual> trial) {
+void DifferentialEvolution::select(shared_ptr<Individual> current, shared_ptr<Individual> donor) {
     double currentFitness = current->evaluate(this->parameters->getFitnessFunction());
-    double trialFitness = trial->evaluate(this->parameters->getFitnessFunction());
+    double trialFitness = donor->evaluate(this->parameters->getFitnessFunction());
 
     if (trialFitness < currentFitness) {
-        current->setElements(trial->getElements());
+        current->setElements(donor->getElements());
     }
 }
 
@@ -116,9 +116,9 @@ shared_ptr<Population> DifferentialEvolution::evaluate(){
         for (int i = 0; i < this->parameters->getPopulationLength(); i++) {
             shared_ptr<Individual> current = this->population->getSolutions()[i];
 
-            shared_ptr<Individual> donor = this->mutate(i);
-            shared_ptr<Individual> trial = this->recombinate(current, donor);
-            this->select(current, trial);
+            shared_ptr<Individual> mutant = this->mutate(i);
+            shared_ptr<Individual> donor = this->recombinate(current, mutant);
+            this->select(current, donor);
         }
 
         generationCounter++;

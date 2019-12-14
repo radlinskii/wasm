@@ -1,7 +1,7 @@
 package server
 
 import (
-	"math"
+	"fmt"
 	"math/rand"
 )
 
@@ -9,17 +9,25 @@ const (
 	sphere fitnessFuncType = iota
 	michalewicz
 	beale
+	elliptic
 )
+
+type fitnessFuncType int
+
+func (f fitnessFuncType) String() string {
+	return []string{"sphere", "michalewicz", "beale", "elliptic"}[f]
+}
 
 func init() {
 	// var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 10, MinValue: 0, MaxValue: 10000000000}
-	var michalewiczFunc = fitnessFunction{ID: michalewicz, Dimensions: 2, MinValue: 0, MaxValue: math.Pi}
+	// var michalewiczFunc = fitnessFunction{ID: michalewicz, Dimensions: 2, MinValue: 0, MaxValue: math.Pi}
 	// var bealeFunc = fitnessFunction{ID: beale, Dimensions: 2, MinValue: -4.5, MaxValue: 4.5}
+	var EllipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
 
-	fitnessFunc = michalewiczFunc
-	populationLength = 100
-	maxNumOfGenerations = 20
-	agentPopulationsCount = 2
+	fitnessFunc = EllipticFunc
+	populationLength = 50
+	maxNumOfGenerations = 100
+	agentPopulationsCount = 25
 }
 
 var agentPopulationsCount = 10
@@ -27,18 +35,50 @@ var fitnessFunc fitnessFunction
 var populationLength = 100
 var maxNumOfGenerations = 100
 
+var agentsMap = make(map[int]agent)
+var agentCount = 0
+
+type agentRequest struct {
+	AgentID    int        `json:"agentId"`
+	Population population `json:"population"`
+}
+
+func (a agentRequest) String() string {
+	return fmt.Sprintf("agentId: %d, population: %v", a.AgentID, a.Population)
+}
+
+type agentResponse struct {
+	Population          population `json:"population"`
+	Func                string     `json:"function"`
+	Dimensions          int        `json:"dimensions"`
+	MinValue            float64    `json:"minValue"`
+	MaxValue            float64    `json:"maxValue"`
+	AgentID             int        `json:"agentId"`
+	CR                  float64    `json:"paramCR"`
+	F                   float64    `json:"paramF"`
+	MaxNumOfGenerations int        `json:"maxNumOfGenerations"`
+}
+
+func (a agentResponse) String() string {
+	return fmt.Sprintf("population: %v, function: %q, dimensions: %v, minValue: %f, maxValue: %f, agentId: %d, CR: %f, F: %f", a.Population, a.Func, a.Dimensions, a.MinValue, a.MaxValue, a.AgentID, a.CR, a.F)
+}
+
+type agent struct {
+	ID               int           `json:"id"`
+	AgentResponse    agentResponse `json:"data"`
+	GenerationNumber int           `json:"generationNumber"`
+}
+
+func (a agent) String() string {
+	return fmt.Sprintf("id: %v, agentResponse: %v, generationNumber: %d", a.ID, a.AgentResponse, a.GenerationNumber)
+}
+
 func getCR() float64 {
 	return getRandF64(0.8, 0.95)
 }
 
 func getF() float64 {
 	return getRandF64(0.4, 0.6)
-}
-
-type fitnessFuncType int
-
-func (f fitnessFuncType) String() string {
-	return []string{"sphere", "michalewicz", "beale"}[f]
 }
 
 // fitnessFunction is a enum of available goal functions
@@ -63,6 +103,10 @@ func getRandF64(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)
 }
 
+func getRandomBool() bool {
+	return getRandInt(0, 2) == 1
+}
+
 func populate(length int, f fitnessFunction) population {
 	var population population
 
@@ -75,4 +119,35 @@ func populate(length int, f fitnessFunction) population {
 	}
 
 	return population
+}
+
+func mutatePopulationWithRandomAgent(optimizedPopulation population) {
+	randomAgentID := getRandomAgentID()
+	randomAgent := agentsMap[randomAgentID]
+	randomAgentPopulation := randomAgent.AgentResponse.Population
+
+	mutatePoopulations(randomAgentPopulation, optimizedPopulation)
+
+	randomAgent.AgentResponse.Population = randomAgentPopulation
+	agentsMap[randomAgentID] = randomAgent
+}
+
+func mutatePoopulations(randomAgentPopulation, optimizedPopulation population) {
+	for i := 0; i < populationLength; i++ {
+		if getRandomBool() {
+			randomAgentPopulation[i], optimizedPopulation[i] = optimizedPopulation[i], randomAgentPopulation[i]
+		}
+	}
+}
+
+func getRandomAgentID() int {
+	keys := make([]int, len(agentsMap))
+
+	i := 0
+	for k := range agentsMap {
+		keys[i] = k
+		i++
+	}
+
+	return keys[getRandInt(0, i)]
 }
