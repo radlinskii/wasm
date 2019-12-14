@@ -5,6 +5,7 @@
 #include "Individual/Individual.h"
 #include "FitnessFunctions/SphereFunction.cpp"
 #include "FitnessFunctions/EllipticFunction.cpp"
+#include "FitnessFunctions/RastriginFunction.cpp"
 
 using namespace std;
 
@@ -51,9 +52,6 @@ double* calculate(double* elements, int len, shared_ptr<FitnessFunction> f, doub
     de->setPopulation(pop);
 
     shared_ptr<Population> evaluatedPopulation = de->evaluate();
-    shared_ptr<Individual> best = evaluatedPopulation->getBest();
-
-    printf("Current best individual: %s\n", best->toString().c_str());
 
     vector<vector<double>> vector2d = evaluatedPopulation->toVectors();
 
@@ -86,6 +84,12 @@ extern "C" {
 
     double* calcElliptic(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<EllipticFunction>(dimensions, make_tuple(min, max));
+
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
+    }
+
+    double* calcRastrigin(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<RastriginFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }

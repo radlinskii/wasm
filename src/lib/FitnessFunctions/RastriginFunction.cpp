@@ -1,17 +1,17 @@
 #include "./FitnessFunction.cpp"
 
-#ifndef ELLIPTIC_FUNCTION_H
-#define ELLIPTIC_FUNCTION_H
+#ifndef RASTRIGIN_FUNCTION_H
+#define RASTRIGIN_FUNCTION_H
 
 // min is at  f(0, ..., 0) = 0
-class EllipticFunction : public FitnessFunction {
+class RastriginFunction : public FitnessFunction {
 public:
-    EllipticFunction() {
+    RastriginFunction() {
         this->domain = make_tuple(-100, 100);
         this->dimensions = 50;
     }
 
-    EllipticFunction(int dimensions, tuple<double, double> domain) {
+    RastriginFunction(int dimensions, tuple<double, double> domain) {
         this->dimensions = dimensions;
         this->domain = domain;
     }
@@ -19,8 +19,8 @@ public:
     double evaluate(vector<double> elements) {
         double result = 0.0;
 
-        for(int i=0; i<dimensions; i++) {
-            result += pow(1.0e6,  i/((double)(dimensions - 1)) ) * elements[i] * elements[i];
+        for(int i = dimensions - 1; i >= 0; i--) {
+            result += elements[i] * elements[i] - 10.0 * cos(2 * M_PI * elements[i]) + 10.0;
         }
 
         return result;

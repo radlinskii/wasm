@@ -8,22 +8,24 @@ import (
 const (
 	sphere fitnessFuncType = iota
 	elliptic
+	rastrigin
 )
 
 type fitnessFuncType int
 
 func (f fitnessFuncType) String() string {
-	return []string{"sphere", "elliptic"}[f]
+	return []string{"sphere", "elliptic", "rastrigin"}[f]
 }
 
 func init() {
-	var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 50, MinValue: -100, MaxValue: 100}
-	// var EllipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
+	// var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 50, MinValue: -100, MaxValue: 100}
+	// var ellipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
+	var rastriginFunc = fitnessFunction{ID: rastrigin, Dimensions: 50, MinValue: -5.12, MaxValue: 5.12}
 
-	fitnessFunc = sphereFunc
+	fitnessFunc = rastriginFunc
 	populationLength = 50
 	maxNumOfGenerations = 100
-	agentPopulationsCount = 25
+	agentPopulationsCount = 100
 }
 
 var agentPopulationsCount = 10

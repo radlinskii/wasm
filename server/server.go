@@ -126,6 +126,7 @@ func (s *Server) listenOnWebSocket(conn *websocket.Conn) {
 
 func (s *Server) handleExceedingMaxNumOfGenerations(a agent, conn *websocket.Conn) {
 	finishMsg := fmt.Sprintf("achieved max number of generations - %d", a.GenerationNumber)
+	fmt.Println(a.AgentResponse.Population[0])
 
 	if _, ok := agentsMap[a.ID]; ok {
 		delete(agentsMap, a.ID)
