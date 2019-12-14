@@ -6,6 +6,7 @@
 #include "FitnessFunctions/MichalewiczFunction.cpp"
 #include "FitnessFunctions/SphereFunction.cpp"
 #include "FitnessFunctions/BealeFunction.cpp"
+#include "FitnessFunctions/EllipticFunction.cpp"
 
 using namespace std;
 
@@ -34,10 +35,10 @@ vector<double> flatten(vector<vector<double>> v, int flattenLen) {
     return flat;
 }
 
-double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessFunction> f, double CR, double F, int maxNumOfGenerations) {
-    int populationLen = len / dimensions;
+double* calculate(double* elements, int len, shared_ptr<FitnessFunction> f, double CR, double F, int maxNumOfGenerations) {
+    int populationLen = len / f->getDimensions();
 
-    vector<vector<double>> zippedVectors = zip(elements, populationLen, dimensions);
+    vector<vector<double>> zippedVectors = zip(elements, populationLen, f->getDimensions());
 
     shared_ptr<Population> pop = make_shared<Population>(zippedVectors);
     shared_ptr<Parameters> params = make_shared<Parameters>();
@@ -58,7 +59,7 @@ double* calculate(double* elements, int len, int dimensions, shared_ptr<FitnessF
 
     vector<vector<double>> vector2d = evaluatedPopulation->toVectors();
 
-    vector<double> flat = flatten(vector2d, dimensions);
+    vector<double> flat = flatten(vector2d, f->getDimensions());
     double* result = new double[len];
     copy(flat.begin(), flat.end(), result);
 
@@ -82,18 +83,24 @@ extern "C" {
     double* calcSphere(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<SphereFunction>(dimensions, make_tuple(min, max));
 
-        return calculate(elements, len, dimensions, f, CR, F, maxNumOfGenerations);
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 
     double* calcMichalewicz(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(min, max));
 
-        return calculate(elements, len, dimensions, f, CR, F, maxNumOfGenerations);
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 
     double* calcBeale(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
         shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(min, max));
 
-        return calculate(elements, len, dimensions, f, CR, F, maxNumOfGenerations);
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
+    }
+
+    double* calcElliptic(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<EllipticFunction>(dimensions, make_tuple(min, max));
+
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 }

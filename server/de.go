@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 )
 
@@ -10,17 +9,25 @@ const (
 	sphere fitnessFuncType = iota
 	michalewicz
 	beale
+	elliptic
 )
+
+type fitnessFuncType int
+
+func (f fitnessFuncType) String() string {
+	return []string{"sphere", "michalewicz", "beale", "elliptic"}[f]
+}
 
 func init() {
 	// var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 10, MinValue: 0, MaxValue: 10000000000}
-	var michalewiczFunc = fitnessFunction{ID: michalewicz, Dimensions: 2, MinValue: 0, MaxValue: math.Pi}
+	// var michalewiczFunc = fitnessFunction{ID: michalewicz, Dimensions: 2, MinValue: 0, MaxValue: math.Pi}
 	// var bealeFunc = fitnessFunction{ID: beale, Dimensions: 2, MinValue: -4.5, MaxValue: 4.5}
+	var EllipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
 
-	fitnessFunc = michalewiczFunc
-	populationLength = 100
+	fitnessFunc = EllipticFunc
+	populationLength = 50
 	maxNumOfGenerations = 100
-	agentPopulationsCount = 100
+	agentPopulationsCount = 25
 }
 
 var agentPopulationsCount = 10
@@ -72,12 +79,6 @@ func getCR() float64 {
 
 func getF() float64 {
 	return getRandF64(0.4, 0.6)
-}
-
-type fitnessFuncType int
-
-func (f fitnessFuncType) String() string {
-	return []string{"sphere", "michalewicz", "beale"}[f]
 }
 
 // fitnessFunction is a enum of available goal functions

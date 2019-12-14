@@ -48,6 +48,16 @@ const calcBeale = ({ pointer, length, dimensions, minValue, maxValue, paramCR, p
     );
 };
 
+const calcElliptic = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
+    const func = window.Module.cwrap('calcElliptic', 'number', ['number', 'number', 'number', 'number', 'number']);
+
+    return new Float64Array(
+        wasmMemory.buffer,
+        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
+        length
+    );
+};
+
 const evaluate = ({ fitnessFunctionType, ...rest }) => {
     switch (fitnessFunctionType) {
         case 'michalewicz':
@@ -56,6 +66,8 @@ const evaluate = ({ fitnessFunctionType, ...rest }) => {
             return calcBeale({ ...rest });
         case 'sphere':
             return calcSphere({ ...rest });
+        case 'elliptic':
+            return calcElliptic({ ...rest });
 
         default:
             throw new Error('Invalid fitness function type');
