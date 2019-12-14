@@ -3,10 +3,11 @@
 #include "Parameters/Parameters.h"
 #include "DifferentialEvolution/DifferentialEvolution.h"
 #include "Individual/Individual.h"
-#include "FitnessFunctions/MichalewiczFunction.cpp"
 #include "FitnessFunctions/SphereFunction.cpp"
-#include "FitnessFunctions/BealeFunction.cpp"
-#include "FitnessFunctions/EllipticFunction.cpp"
+#include "FitnessFunctions/SalomonFunction.cpp"
+#include "FitnessFunctions/RastriginFunction.cpp"
+#include "FitnessFunctions/RosenbrockFunction.cpp"
+#include "FitnessFunctions/AckleyFunction.cpp"
 
 using namespace std;
 
@@ -53,9 +54,6 @@ double* calculate(double* elements, int len, shared_ptr<FitnessFunction> f, doub
     de->setPopulation(pop);
 
     shared_ptr<Population> evaluatedPopulation = de->evaluate();
-    shared_ptr<Individual> best = evaluatedPopulation->getBest();
-
-    printf("Current best individual: %s\n", best->toString().c_str());
 
     vector<vector<double>> vector2d = evaluatedPopulation->toVectors();
 
@@ -86,20 +84,26 @@ extern "C" {
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 
-    double* calcMichalewicz(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
-        shared_ptr<FitnessFunction> f = make_shared<MichalewiczFunction>(dimensions, make_tuple(min, max));
+    double* calcSalomon(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<SalomonFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 
-    double* calcBeale(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
-        shared_ptr<FitnessFunction> f = make_shared<BealeFunction>(dimensions, make_tuple(min, max));
+    double* calcRastrigin(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<RastriginFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 
-    double* calcElliptic(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
-        shared_ptr<FitnessFunction> f = make_shared<EllipticFunction>(dimensions, make_tuple(min, max));
+    double* calcRosenbrock(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<RosenbrockFunction>(dimensions, make_tuple(min, max));
+
+        return calculate(elements, len, f, CR, F, maxNumOfGenerations);
+    }
+
+    double* calcAckley(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<AckleyFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
