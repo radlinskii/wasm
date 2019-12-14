@@ -7,7 +7,7 @@ import (
 
 const (
 	sphere fitnessFuncType = iota
-	elliptic
+	salomon
 	rastrigin
 	rosenbrock
 	ackley
@@ -16,17 +16,17 @@ const (
 type fitnessFuncType int
 
 func (f fitnessFuncType) String() string {
-	return []string{"sphere", "elliptic", "rastrigin", "rosenbrock", "ackley"}[f]
+	return []string{"sphere", "salomon", "rastrigin", "rosenbrock", "ackley"}[f]
 }
 
 func init() {
 	// var sphereFunc = fitnessFunction{ID: sphere, Dimensions: 50, MinValue: -1000, MaxValue: 1000}
-	// var ellipticFunc = fitnessFunction{ID: elliptic, Dimensions: 50, MinValue: -100, MaxValue: 100}
+	var salomonFunc = fitnessFunction{ID: salomon, Dimensions: 50, MinValue: -100, MaxValue: 100}
 	// var rastriginFunc = fitnessFunction{ID: rastrigin, Dimensions: 50, MinValue: -5.12, MaxValue: 5.12}
 	// var rosenbrockFunc = fitnessFunction{ID: rosenbrock, Dimensions: 50, MinValue: -1000, MaxValue: 1000}
-	var ackleyFunc = fitnessFunction{ID: ackley, Dimensions: 50, MinValue: -32, MaxValue: 32}
+	// var ackleyFunc = fitnessFunction{ID: ackley, Dimensions: 50, MinValue: -32, MaxValue: 32}
 
-	fitnessFunc = ackleyFunc
+	fitnessFunc = salomonFunc
 	populationLength = 50
 	maxNumOfGenerations = 100
 	agentPopulationsCount = 100

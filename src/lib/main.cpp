@@ -4,7 +4,7 @@
 #include "DifferentialEvolution/DifferentialEvolution.h"
 #include "Individual/Individual.h"
 #include "FitnessFunctions/SphereFunction.cpp"
-#include "FitnessFunctions/EllipticFunction.cpp"
+#include "FitnessFunctions/SalomonFunction.cpp"
 #include "FitnessFunctions/RastriginFunction.cpp"
 #include "FitnessFunctions/RosenbrockFunction.cpp"
 #include "FitnessFunctions/AckleyFunction.cpp"
@@ -84,8 +84,8 @@ extern "C" {
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
 
-    double* calcElliptic(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
-        shared_ptr<FitnessFunction> f = make_shared<EllipticFunction>(dimensions, make_tuple(min, max));
+    double* calcSalomon(double* elements, int len, int dimensions, double min, double max, double CR, double F, int maxNumOfGenerations) {
+        shared_ptr<FitnessFunction> f = make_shared<SalomonFunction>(dimensions, make_tuple(min, max));
 
         return calculate(elements, len, f, CR, F, maxNumOfGenerations);
     }
