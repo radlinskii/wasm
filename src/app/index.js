@@ -18,36 +18,25 @@ const zip = (list, len, zipLen) => {
 
 const greetFromCpp = window.cwrap('greet', 'string', ['string']);
 
-const calcSphere = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
-    const func = window.Module.cwrap('calcSphere', 'number', ['number', 'number', 'number', 'number', 'number']);
+const evaluate = ({
+    fitnessFunctionType,
+    pointer,
+    length,
+    dimensions,
+    minValue,
+    maxValue,
+    paramCR,
+    paramF,
+    maxNumOfGenerations,
+}) => {
+    const funcName = `calc${capitalize(fitnessFunctionType)}`;
+    const func = window.Module.cwrap(funcName, 'number', ['number', 'number', 'number', 'number', 'number']);
 
     return new Float64Array(
         wasmMemory.buffer,
         func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
         length
     );
-};
-
-const calcElliptic = ({ pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations }) => {
-    const func = window.Module.cwrap('calcElliptic', 'number', ['number', 'number', 'number', 'number', 'number']);
-
-    return new Float64Array(
-        wasmMemory.buffer,
-        func(pointer, length, dimensions, minValue, maxValue, paramCR, paramF, maxNumOfGenerations),
-        length
-    );
-};
-
-const evaluate = ({ fitnessFunctionType, ...rest }) => {
-    switch (fitnessFunctionType) {
-        case 'sphere':
-            return calcSphere({ ...rest });
-        case 'elliptic':
-            return calcElliptic({ ...rest });
-
-        default:
-            throw new Error('Invalid fitness function type');
-    }
 };
 
 const evaluatePopulation = ({
@@ -128,3 +117,7 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById('app'));
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
